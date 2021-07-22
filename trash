@@ -1,0 +1,15 @@
+showAddUniSuccessToast,
+    showEditUniSuccessToast,
+    showDeleteUniSuccessToast,
+    showAddUniFailToast,
+    showEditUniFailToast,
+    showDeleteUniFailToast,
+
+    showEditUniReqSuccessToast,
+    showEditUniReqFailToast,
+
+    showAddUserSuccessToast,
+    showDeleteUserSuccessToast,
+    showEditUserSuccessToast,
+
+    showEditStudentSuccessToast
