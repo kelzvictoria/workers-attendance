@@ -209,9 +209,9 @@ function Dashboard(props) {
       </GridContainer>
       <GridContainer className="cont">
         <GridItem xs={16} sm={16} md={8} className="ai">
-          <GridItem xs={24} sm={24} md={12} className="check">
+          <GridItem xs={48} sm={48} md={24} className="check">
             <Card>
-              <BookingCalendar bookings={bookings} />
+              <BookingCalendar className="clnd" bookings={bookings} />
             </Card>
           </GridItem></GridItem>
         <GridItem xs={8} sm={8} md={4}>

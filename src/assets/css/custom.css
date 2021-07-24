@@ -1252,3 +1252,9 @@ form.add-worker-form {
     padding-right: 30px;
   }
 }
+
+@media (max-width: 1056px) {
+  .MuiGrid-root.makeStyles-grid-97.MuiGrid-item.MuiGrid-grid-md-8 {
+    display: none;
+  }
+}
