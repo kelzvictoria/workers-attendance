@@ -103,7 +103,7 @@ class Attendances extends Component {
     console.log("worker_d", worker_d);
 
     const newAttendance = {
-      user_id: this.props.logged_in_user,
+      user_id: this.props.logged_in_user._id ? this.props.logged_in_user._id : this.props.logged_in_user.id,
       worker_id: this.state.worker,
       date_created: new Date().toISOString(),
       worker_details: worker_d
@@ -596,7 +596,7 @@ const mapStateToProps = (state) => ({
   worker: state.fetchData,
   error: state.error,
   toast: state.toast,
-  logged_in_user: state.auth.user._id,
+  logged_in_user: state.auth.user,
   addAttSuccess: state.fetchData.addAttSuccess,
   editAttSuccess: state.fetchData.editAttSuccess,
   deleteAttSuccess: state.fetchData.deleteAttSuccess

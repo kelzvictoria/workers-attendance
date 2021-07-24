@@ -47,6 +47,29 @@ function mapStateToProps(state) {
   }
 }
 
+function timeSince(date) {
+
+  var seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  console.log("seconds", seconds);
+  var divisors = [31536000, 2592000, 86400, 3600, 60, 1]
+  var description = ["years", "months", "days", "hours", "minutes", "seconds"]
+  var result = [];
+
+  var interval = seconds;
+
+  for (let i = 0; i < divisors.length; i++) {
+    interval = Math.floor(seconds / divisors[i])
+    if (interval > 1) {
+      result.push(interval + " " + description[i])
+    }
+    seconds -= interval * divisors[i]
+  }
+
+  console.log("result", result);
+
+  return result.join(" ")
+}
+
 function Dashboard(props) {
   useEffect(() => {
     props.getWorkers();
@@ -66,6 +89,34 @@ function Dashboard(props) {
   const bookings = [
     new Date(2021, 7, 17),
   ];
+
+
+
+  let minutes_ago;
+
+  if (attendances.length) {
+    let percentage_present = attendances.length / workers.length * 100;
+    let percentage_absent = 100 - percentage_present;
+
+    setInterval(() => {
+      last_added_time = attendances[attendances.length - 1].date_created;
+
+    }, 1000)
+    let last_added_time = attendances[attendances.length - 1].date_created;
+    console.log("last_added_time", last_added_time);
+    minutes_ago = timeSince(last_added_time);
+    console.log("minutes_ago", minutes_ago);
+
+    console.log(
+      "attendances", attendances,
+      "workers.length", workers.length,
+      "percentage_present", percentage_present,
+      "ercentage_absent", percentage_absent
+    );
+
+    donutChart.data.labels = [`${percentage_present}%`, `${percentage_absent}%`];
+    donutChart.data.series = [percentage_present, percentage_absent]
+  }
 
   console.log("props.attendance", props.attendance);
 
@@ -186,9 +237,9 @@ function Dashboard(props) {
                 </p>
               </CardBody>
               <CardFooter chart>
-                <div className="stats">
-                  <AccessTime /> updated 4 minutes ago
-                </div>
+                {minutes_ago && <div className="stats">
+                  <AccessTime /> updated {minutes_ago} minutes ago
+                </div>}
               </CardFooter>
             </Card>
           </GridItem>
