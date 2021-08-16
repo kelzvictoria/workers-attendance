@@ -87,15 +87,14 @@ function Dashboard(props) {
   const { isAuthenticated } = props.isAuthenticated;
 
   const bookings = [
-    new Date(2021, 7, 17),
+    // new Date(2021, 7, 17),
   ];
-
-
 
   let minutes_ago;
 
   if (attendances.length) {
-    let percentage_present = attendances.length / workers.length * 100;
+    let percentage_present = (attendances.length / workers.length * 100).toFixed(2);
+    console.log("percentage_present", percentage_present);
     let percentage_absent = 100 - percentage_present;
 
     setInterval(() => {
