@@ -60,8 +60,8 @@ export class App extends React.Component {
             <ProtectedRoute path="/admin" component={Admin} />
             <Route exact={true} path="/login" component={LogIn} />
             <Redirect from="/admin" to="/admin/dashboard" />
-            {/* <Redirect from="/" to="/admin/dashboard" /> */}
-            <Route exact={true} path="/report/workers" component={Workers} />
+            <Redirect from="/" to="/admin/dashboard" />
+            {/* <Route exact={true} path="/report/workers" component={Workers} /> */}
           </Switch>
         </Provider>
       </Router>
