@@ -40,7 +40,9 @@ import {
   showFailToast,
   showSuccessToast
 } from "../../actions/toastActions";
-import Toast from "../../components/toast/Toast"
+import Toast from "../../components/toast/Toast";
+
+import generatePDF from '../Reporting/Generator';
 
 import logo from "../../assets/img/logo.png"
 const { Option } = Select;
@@ -266,10 +268,15 @@ class Workers extends Component {
 
     if (ministry_arms.length > 0) {
       for (let i = 0; i < ministry_arms.length; i++) {
-        console.log("ministry_arms[i]", ministry_arms[i]);
+        // console.log("ministry_arms[i]", ministry_arms[i]);
         this.state.ministry_arms_children.push(<Option key={ministry_arms[i]}>{ministry_arms[i]}</Option>);
       }
     }
+  }
+
+  printWorkersData = () => {
+    console.log("ok");
+    generatePDF("workers", this.props.worker.workers);
   }
 
   render() {
@@ -310,6 +317,23 @@ class Workers extends Component {
               </Button>
             </div>
             <div className="col-xs-6 col-sm-6 col-md-6">
+
+              <Button
+                className={
+                  `btn btn-primary btn-print-workers font-size--14
+       
+                   `
+                }
+                onClick={() => {
+                  this.printWorkersData();
+                  // this.handleMinistryArmMultiSelect()
+                }
+                }
+              //id="all-workers"
+              >
+                Print
+              </Button>
+
             </div>
           </div>
 

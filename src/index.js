@@ -29,6 +29,7 @@ import {
 } from "./actions/fetchDataActions"
 
 import Register from "components/auth/Register";
+import Workers from "views/Reporting/Workers";
 import LogIn from "components/auth/LogIn";
 
 import ProtectedRoute from "views/ProtectedRoute"
@@ -59,7 +60,8 @@ export class App extends React.Component {
             <ProtectedRoute path="/admin" component={Admin} />
             <Route exact={true} path="/login" component={LogIn} />
             <Redirect from="/admin" to="/admin/dashboard" />
-            <Redirect from="/" to="/admin/dashboard" />
+            {/* <Redirect from="/" to="/admin/dashboard" /> */}
+            <Route exact={true} path="/report/workers" component={Workers} />
           </Switch>
         </Provider>
       </Router>

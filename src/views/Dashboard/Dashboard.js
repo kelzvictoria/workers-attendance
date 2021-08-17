@@ -80,7 +80,7 @@ function Dashboard(props) {
     , []
   );
 
-  const { attendances } = props.attendance;
+  let attendances = props.attendance.attendances;
   const { workers } = props.worker;
   const { ministryArms } = props.ministryArm;
   const { directorates } = props.directorate;
@@ -91,6 +91,10 @@ function Dashboard(props) {
   ];
 
   let minutes_ago;
+
+  let today = new Date().toISOString().split("T")[0];
+
+  attendances = attendances.filter(a => a.date_created.split("T")[0] === today)
 
   if (attendances.length) {
     let percentage_present = (attendances.length / workers.length * 100).toFixed(2);
@@ -237,7 +241,7 @@ function Dashboard(props) {
               </CardBody>
               <CardFooter chart>
                 {minutes_ago && <div className="stats">
-                  <AccessTime /> updated {minutes_ago} minutes ago
+                  <AccessTime /> updated {minutes_ago} {minutes_ago.split(" ")[1] !== "seconds" && "minutes ago"}
                 </div>}
               </CardFooter>
             </Card>

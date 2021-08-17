@@ -1258,3 +1258,8 @@ form.add-worker-form {
     display: none;
   }
 }
+
+.btn-print-workers {
+  float: right;
+  border: 2px solid #ed3237 !important;
+}

@@ -176,7 +176,11 @@ class Attendances extends Component {
   }
 
   render() {
-    const { attendances, isEditAttModalOpen, isViewAttModalOpen, attendance } = this.props.attendance;
+    let attendances = this.props.attendance.attendances;
+    const { isEditAttModalOpen, isViewAttModalOpen, attendance } = this.props.attendance;
+    let today = new Date().toISOString().split("T")[0];
+
+    attendances = attendances.filter(a => a.date_created.split("T")[0] === today)
     const { workers } = this.props.worker;
     const allAttProps = {
       attendances,
