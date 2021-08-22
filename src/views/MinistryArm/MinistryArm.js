@@ -49,6 +49,7 @@ class MinistryArms extends Component {
   state = {
     openTab: "all-ministry_arms",
     isAddMinistryArmModalOpen: false,
+    isViewMAModalOpen: false,
     name: "",
     directorate_id: "",
     ministry_head: "",
@@ -61,7 +62,6 @@ class MinistryArms extends Component {
     super(props);
     this.toggleActionsDropdown = this.toggleActionsDropdown.bind(this);
   }
-
 
   handleChange = (e) => {
     this.setState({
@@ -226,7 +226,7 @@ class MinistryArms extends Component {
   }
 
   render() {
-    const { ministry_arms, isEditMinistryArmModalOpen, isViewMinistryArmModalOpen, ministry_arm } = this.props;
+    const { ministry_arms, isEditMinistryArmModalOpen, isViewMAModalOpen, ministry_arm } = this.props;
     // const { ministry_arms } = this.props.ministry_arm;
     const allMinistryArmProps = {
       ministry_arms,
@@ -234,7 +234,9 @@ class MinistryArms extends Component {
       ministry_arms
     };
 
-    let ministry_arm_to_edit = ministry_arm ? ministry_arm[0] : "";
+    let ministry_arm_to_view = ministry_arm ? ministry_arm[0] : "";
+
+    console.log("ministry_arm_to_view", ministry_arm_to_view);
 
     console.log("this.state", this.state);
     // console.log("this.props.logged_in_user", this.props.logged_in_user);
@@ -461,28 +463,17 @@ class MinistryArms extends Component {
           </div>
         </Modal>
         <Modal
-          open={isViewMinistryArmModalOpen}
+          open={isViewMAModalOpen}
           onClose={this.toggleViewMAModal}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
           <div className="paper modal-style">
-            <MDBModalHeader>View MinistryArm</MDBModalHeader>
+            <MDBModalHeader>Ministry Arm: {ministry_arm_to_view.name}
+              <br /> Head: {ministry_arm_to_view.ministry_head_details.first_name + " " + ministry_arm_to_view.ministry_head_details.last_name}</MDBModalHeader>
             <button onClick={this.toggleViewMAModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
             <form className="add-ministry_arm-form" onSubmit={this.editMinistryArm}>
-              <div className="ministry_arm-badge-div">
-                <div className="ministry_arm-badge">
-                  <label htmlFor="file">
-                    <img
-                      id="badge-img"
-                      alt="badge"
-                      src={ministry_arm_to_edit ? ministry_arm_to_edit.iconUrl : CameraIcon}
-                    />
 
-                  </label>
-                </div>
-                <h5>MinistryArm Badge</h5>
-              </div>
               <div className="row">
                 <div className="col-md-6 padding-bottom--16">
                   <label className="form-label">MinistryArm Name</label>
@@ -490,7 +481,7 @@ class MinistryArms extends Component {
                     className="form-control"
                     placeholder="MinistryArm Name"
                     name="name"
-                    value={ministry_arm_to_edit ? ministry_arm_to_edit.name : ""}
+                    value={ministry_arm_to_view ? ministry_arm_to_view.name : ""}
                     readOnly={true}
                   />
                 </div>
@@ -500,7 +491,7 @@ class MinistryArms extends Component {
                     className="form-control"
                     placeholder="MinistryArm Name"
                     name="abbr"
-                    value={ministry_arm_to_edit ? ministry_arm_to_edit.abbr : ""}
+                    value={ministry_arm_to_view ? ministry_arm_to_view.abbr : ""}
                     readOnly={true}
                   />
                 </div>
@@ -512,7 +503,7 @@ class MinistryArms extends Component {
                     id="lga"
                     className="form-control select-lga"
                     readOnly={true}
-                    value={ministry_arm_to_edit ? ministry_arm_to_edit.city : ""}
+                    value={ministry_arm_to_view ? ministry_arm_to_view.city : ""}
                   />
 
                 </div>
@@ -660,6 +651,7 @@ const mapStateToProps = (state) => ({
   workers: state.fetchData.workers,
   error: state.error,
   toast: state.toast,
+  isViewMAModalOpen: state.fetchData.isViewMAModalOpen,
   logged_in_user: state.auth.user,
   addMASuccess: state.fetchData.addMASuccess,
   editMASuccess: state.fetchData.editMASuccess,

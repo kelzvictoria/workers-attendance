@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import {
   deleteAttendance,
   getAttendance,
+
   toggleEditAttModal,
   toggleViewAttModal,
 
-} from "../actions/attendanceActions";
+} from "../actions/fetchDataActions";
+
+import {
+  getMinistryArm,
+  toggleViewMAModal
+} from "../actions/fetchDataActions"
 
 import {
   deleteUser,
@@ -25,14 +31,16 @@ import {
 
 import {
   deleteMinistryArm,
-  deleteDirectorate
-} from "../actions/fetchDataActions"
+  deleteDirectorate,
+
+} from "../actions/fetchDataActions";
 
 import { connect } from "react-redux";
 
 import { withRouter } from "react-router-dom";
 
-import onClickOutside from 'react-onclickoutside'
+import onClickOutside from 'react-onclickoutside';
+import { Popconfirm } from 'antd';
 
 class ActionButton extends Component {
   constructor(props) {
@@ -59,8 +67,9 @@ class ActionButton extends Component {
   handleView = (id, url) => {
     switch (url) {
       case "/attendances/":
-        this.props.toggleViewAttModal(id);
-        this.handleViewAtt(id);
+        //this.props.toggleViewAttModal(id);
+        //this.handleViewAtt(id);
+        this.handleBlur();
         break;
 
       // case "/users/":
@@ -85,6 +94,17 @@ class ActionButton extends Component {
         this.props.toggleViewAttModal(id);
         break;
 
+      case "/ministry-arms/":
+        //this.goToMinistryArms();
+        // this.props.getMinistryArm(id)
+        this.props.toggleViewMAModal(id)
+        this.handleViewMA(id);
+        break;
+
+      //   this.props.toggleViewWorkerModal(id);
+      //   this.handleViewWorker(id);
+      //   break;
+
       default:
         console.log("view was clicked")
         break;
@@ -94,8 +114,9 @@ class ActionButton extends Component {
   handleEdit = (id, url) => {
     switch (url) {
       case "/attendances/":
-        this.props.getAttendance(id);
-        this.props.toggleEditAttModal(this.props.attendance);
+        //this.props.getAttendance(id);
+        // this.props.toggleEditAttModal(this.props.attendance);
+        this.handleBlur();
         break;
 
       case "/users/":
@@ -172,7 +193,7 @@ class ActionButton extends Component {
   };
 
   handleBlur = () => {
-    console.log("is-blur");
+    //console.log("is-blur");
     this.setState({
       isActionsOpen: false,
     });
@@ -180,6 +201,10 @@ class ActionButton extends Component {
 
   handleViewAtt(id) {
     this.props.getAttendance(id);
+  }
+
+  handleViewMA(id) {
+    this.props.getMinistryArm(id);
   }
 
   handleViewUser(id) {
@@ -202,6 +227,12 @@ class ActionButton extends Component {
     })
   }
 
+  goToMinistryArms = () => {
+    this.props.history.push({
+      pathname: "/admin/ministry-arm"
+    })
+  }
+
   // handleEditUser(id) {
   //   this.props.editUser(id)
   // }
@@ -221,6 +252,7 @@ class ActionButton extends Component {
     let user_role = this.props.auth.user.role;
     //console.log("user_role", user_role);
     const { id, url } = this.props.data;
+    // console.log("id", id);
 
     return (
       <div
@@ -266,6 +298,7 @@ class ActionButton extends Component {
           {
             user_role[0] === "superadmin" &&
 
+            // <Popconfirm title="Are you sure？" okText="Yes" cancelText="No">
             <li>
               <a
 
@@ -276,6 +309,8 @@ class ActionButton extends Component {
                 Delete
               </a>
             </li>
+            // </Popconfirm>
+
 
           } </ul>
       </div>
@@ -288,7 +323,8 @@ const mapStateToProps = (state) => ({
   attendance: state.attendance,
   user: state.user,
   worker: state.worker,
-  auth: state.auth
+  auth: state.auth,
+  ministry_arm: state.ministry_arm
 });
 
 export default withRouter(connect(mapStateToProps, {
@@ -306,6 +342,8 @@ export default withRouter(connect(mapStateToProps, {
   toggleEditWorkerModal,
   toggleViewWorkerModal,
   deleteMinistryArm,
-  deleteDirectorate
+  deleteDirectorate,
+  getMinistryArm,
+  toggleViewMAModal
   // getAttendances,
 })(onClickOutside(ActionButton)));

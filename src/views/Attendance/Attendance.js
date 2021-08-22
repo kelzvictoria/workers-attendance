@@ -15,6 +15,9 @@ import ActionButton from "../Actions";
 import CameraIcon from "assets/svgs/camera.svg";
 import { connect } from "react-redux";
 
+import { DatePicker, Space, Popconfirm } from 'antd';
+
+
 import NaijaStates from "naija-state-local-government";
 import {
   getAttendances,
@@ -44,7 +47,9 @@ import {
 import Toast from "../../components/toast/Toast"
 
 import logo from "../../assets/img/logo.png"
+import generatePDF from "views/Reporting/Generator";
 
+const { RangePicker } = DatePicker;
 
 class Attendances extends Component {
   state = {
@@ -56,6 +61,44 @@ class Attendances extends Component {
   constructor(props) {
     super(props);
     this.toggleActionsDropdown = this.toggleActionsDropdown.bind(this);
+  }
+
+  printAttendance = (day) => {
+    window.location.reload();
+    console.log("day", day);
+    let data;
+
+    if (typeof day === "object") {
+      let start_date = new Date(day[0]._id).getTime;
+      let end_date = new Date(day[1]._id).getTime;
+
+      data = this.props.attendance.attendances.filter(a => {
+        let d = new Date(a).getTime;
+        return d >= start_date && d <= end_date
+      })
+      if (data.length) {
+        generatePDF("attendance-range", data)
+      }
+
+    } else {
+      let date1 = new Date().toISOString().split("T")[0];
+      let date2;
+
+      if (day == "today") {
+        date2 = date1;
+      } else {
+        date2 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+      }
+
+      data = this.props.attendance.attendances.filter(a => {
+        //console.log("a", a);
+        return a.date_created.split("T")[0] === date2
+      });
+      if (data.length) {
+        generatePDF("attendance-range", data)
+      }
+    }
+
   }
 
   onChangeTab = (id) => {
@@ -189,15 +232,15 @@ class Attendances extends Component {
     };
 
     let att_to_edit = attendance ? attendance[0] : "";
-    console.log("this.state", this.state);
-    console.log("this.props.logged_in_user", this.props.logged_in_user);
+    //console.log("this.state", this.state);
+    //console.log("this.props.logged_in_user", this.props.logged_in_user);
     return (
       <GridContainer>
 
         <GridItem xs={12} sm={12} md={12}>
 
           <div className="row attendances-row">
-            <div className="col-xs-6 col-sm-6 col-md-6">
+            <div className="col-xs-6 col-sm-6 col-md-6 display--flex">
               <Button
                 className={
                   `btn btn-primary btn-attendances font-size--14 ${this.state.openTab === "all-attendances" && "active-btn"}`
@@ -210,8 +253,66 @@ class Attendances extends Component {
               >
                 Mark Attendance
               </Button>
+
+              <Popconfirm
+                onConfirm={() => {
+                  this.printAttendance("today");
+                }
+                }
+                title="Proceed to print today's attendance？"
+                okText="Yes"
+                cancelText="No">
+                <Button
+                  className={
+                    `btn btn-primary btn-print-workers font-size--14`
+                  }
+                  // onClick={() => {
+                  //   this.printAttendance("today");
+                  // }
+                  // }
+                  id="print-todays-attendance"
+                >
+                  Print Today's Attendance
+                </Button>
+              </Popconfirm>
             </div>
-            <div className="col-xs-6 col-sm-6 col-md-6">
+            <div className="col-xs-6 col-sm-6 col-md-6 display--flex">
+              <Button
+                className={
+                  `btn btn-primary btn-print-workers font-size--14`
+                }
+                onClick={() => {
+                  this.printAttendance("last-meeting");
+                }
+                }
+                id="print-todays-attendance"
+              >
+                Print Last's Attendance
+              </Button>
+
+              {/* <Button
+                className={
+                  `btn btn-primary btn-print-workers font-size--14`
+                }
+                onClick={
+                }
+                id="print-custom-attendance"
+              > */}
+              <Space direction="vertical"
+
+                size={12}>
+                <RangePicker
+                  className={
+                    `date-range-picker btn-print-workers font-size--14`
+                  }
+                  style={{
+                    color: "rgba(0, 0, 0, 0.87) !important;",
+
+                  }}
+                  onChange={this.printAttendance} />
+              </Space>
+              {/* Select Meeting Attendance
+              </Button> */}
             </div>
           </div>
 

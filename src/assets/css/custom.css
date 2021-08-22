@@ -1263,3 +1263,18 @@ form.add-worker-form {
   float: right;
   border: 2px solid #ed3237 !important;
 }
+
+
+.display--flex {
+  display: flex !important;
+}
+
+.attendances-row button {
+  margin-right: 0.5rem !important;
+  line-height: normal !important;
+}
+
+.date-range-picker {
+  border-radius: 4px;
+  
+}

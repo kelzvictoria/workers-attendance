@@ -442,7 +442,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 ministryArm: state.ministryArms.filter(
-                    (ministryArm) => ministryArm.id == action.payload
+                    (ministryArm) => ministryArm._id == action.payload
                 ),
                 ministryArm_loading: false,
             };

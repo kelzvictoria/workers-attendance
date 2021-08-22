@@ -61,6 +61,20 @@ const generatePDF = async (entity, data) => {
                 tableRows.push(dd);
             });
             break;
+
+        case "attendance-range":
+            tableColumn = ["", "Worker", "Ministry", "Date", "Time In"];
+            await data.forEach((d, i) => {
+                const dd = [
+                    i + 1,
+                    d.worker_details.first_name + " " + d.worker_details.last_name,
+                    d.worker_details.ministry_arm.map(m => m, ", "),
+                    new Date(`${d.date_created}`).toLocaleDateString(),
+                    new Date(`${d.date_created}`).toLocaleTimeString()
+                ];
+                tableRows.push(dd);
+            });
+            break;
         default:
             tableColumn = [];
             tableRows = [];

@@ -552,6 +552,7 @@ export const deleteMinistryArm = (id) => (dispatch, getState) => {
 };
 
 export const getMinistryArm = (id) => (dispatch) => {
+    console.log("id", id);
     dispatch(setMinistryArmLoading());
 
     dispatch({
@@ -654,7 +655,7 @@ export const getWorkers = () => async (dispatch, getState) => {
             payload: res.data
         })
     }).catch(err => {
-        dispatch(returnErrors(err.response.data, err.response.status))
+        err.response && dispatch(returnErrors(err.response.data, err.response.status))
     })
 }
 
