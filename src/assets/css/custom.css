@@ -1264,7 +1264,6 @@ form.add-worker-form {
   border: 2px solid #ed3237 !important;
 }
 
-
 .display--flex {
   display: flex !important;
 }
@@ -1276,5 +1275,17 @@ form.add-worker-form {
 
 .date-range-picker {
   border-radius: 4px;
-  
+}
+
+.view-ministry_arm-paper {
+  width: 90% !important;
+}
+
+a[href^="/admin/ministry-arm-details"],
+a[href^="/admin/directorate-details"] {
+  display: none;
+}
+
+.details_heading {
+  font-weight: 500;
 }

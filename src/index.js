@@ -33,6 +33,7 @@ import Workers from "views/Reporting/Workers";
 import LogIn from "components/auth/LogIn";
 
 import ProtectedRoute from "views/ProtectedRoute"
+import Details  from "views/MinistryArm/Details"
 
 const hist = createBrowserHistory();
 
@@ -59,6 +60,7 @@ export class App extends React.Component {
           <Switch>
             <ProtectedRoute path="/admin" component={Admin} />
             <Route exact={true} path="/login" component={LogIn} />
+            <Route exact={true} path="/ministry-arm/:id" component={Details} />
             <Redirect from="/admin" to="/admin/dashboard" />
             <Redirect from="/" to="/admin/dashboard" />
             {/* <Route exact={true} path="/report/workers" component={Workers} /> */}

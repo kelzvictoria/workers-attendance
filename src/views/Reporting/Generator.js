@@ -84,14 +84,20 @@ const generatePDF = async (entity, data) => {
 
     doc.autoTable({
         head: [tableColumn],
-        body: tableRows
+        body: tableRows,
+        margin: {
+            top: 20
+        },
+        // styles: {
+        //     marginTop: 30
+        // }
     })
 
-    const date = Date().split(" ");
-    const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
+    const date = new Date().toISOString().split("T")[0].split("-");
+    const dateStr = date[2] + "-" +  date[1] + "-" + date[0];
 
     doc.text("Workers", 14, 15);
-    doc.save(`report_${dateStr}.pdf`);
+    doc.save(`workers_meeting_${dateStr}.pdf`);
 };
 
 export default generatePDF;

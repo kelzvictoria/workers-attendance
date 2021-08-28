@@ -10,7 +10,8 @@ import {
 
 import {
   getMinistryArm,
-  toggleViewMAModal
+  toggleViewMAModal,
+  getDirectorate
 } from "../actions/fetchDataActions"
 
 import {
@@ -67,20 +68,8 @@ class ActionButton extends Component {
   handleView = (id, url) => {
     switch (url) {
       case "/attendances/":
-        //this.props.toggleViewAttModal(id);
-        //this.handleViewAtt(id);
         this.handleBlur();
         break;
-
-      // case "/users/":
-      //   this.props.toggleViewUserModal(id);
-      //   this.handleViewUser(id);
-      //   break;
-
-      // case "/workers/":
-      //   this.props.toggleViewWorkerModal(id);
-      //   this.handleViewWorker(id);
-      //   break;
 
       case "/dash-workers/":
         this.goToWorkers();
@@ -95,15 +84,12 @@ class ActionButton extends Component {
         break;
 
       case "/ministry-arms/":
-        //this.goToMinistryArms();
-        // this.props.getMinistryArm(id)
-        this.props.toggleViewMAModal(id)
         this.handleViewMA(id);
         break;
 
-      //   this.props.toggleViewWorkerModal(id);
-      //   this.handleViewWorker(id);
-      //   break;
+      case "/directorates/":
+        this.handleViewDirectorate(id);
+        break;
 
       default:
         console.log("view was clicked")
@@ -114,8 +100,6 @@ class ActionButton extends Component {
   handleEdit = (id, url) => {
     switch (url) {
       case "/attendances/":
-        //this.props.getAttendance(id);
-        // this.props.toggleEditAttModal(this.props.attendance);
         this.handleBlur();
         break;
 
@@ -205,6 +189,12 @@ class ActionButton extends Component {
 
   handleViewMA(id) {
     this.props.getMinistryArm(id);
+    this.goToMinistryArms(id);
+  }
+
+  handleViewDirectorate(id) {
+    this.props.getDirectorate(id);
+    this.goToDirectorates(id);
   }
 
   handleViewUser(id) {
@@ -227,9 +217,16 @@ class ActionButton extends Component {
     })
   }
 
-  goToMinistryArms = () => {
+  goToMinistryArms = (id) => {
     this.props.history.push({
-      pathname: "/admin/ministry-arm"
+      pathname: `/admin/ministry-arm-details/${id}`
+    })
+  }
+
+  goToDirectorates = (id) => {
+    
+    this.props.history.push({
+      pathname: `/admin/directorate-details/${id}`
     })
   }
 
@@ -344,6 +341,7 @@ export default withRouter(connect(mapStateToProps, {
   deleteMinistryArm,
   deleteDirectorate,
   getMinistryArm,
-  toggleViewMAModal
+  toggleViewMAModal,
+  getDirectorate
   // getAttendances,
 })(onClickOutside(ActionButton)));

@@ -42,6 +42,8 @@ import {
 } from "../../actions/toastActions";
 import Toast from "../../components/toast/Toast"
 
+import Details from "./Details";
+
 import logo from "../../assets/img/logo.png"
 const { Option } = Select;
 
@@ -226,7 +228,7 @@ class MinistryArms extends Component {
   }
 
   render() {
-    const { ministry_arms, isEditMinistryArmModalOpen, isViewMAModalOpen, ministry_arm } = this.props;
+    const { ministry_arms, isEditMinistryArmModalOpen, isViewMAModalOpen, ministry_arm, ministry_arm_workers } = this.props;
     // const { ministry_arms } = this.props.ministry_arm;
     const allMinistryArmProps = {
       ministry_arms,
@@ -235,8 +237,7 @@ class MinistryArms extends Component {
     };
 
     let ministry_arm_to_view = ministry_arm ? ministry_arm[0] : "";
-
-    console.log("ministry_arm_to_view", ministry_arm_to_view);
+    console.log("ministry_arm_workers", ministry_arm_workers);
 
     console.log("this.state", this.state);
     // console.log("this.props.logged_in_user", this.props.logged_in_user);
@@ -462,106 +463,7 @@ class MinistryArms extends Component {
             </form>
           </div>
         </Modal>
-        <Modal
-          open={isViewMAModalOpen}
-          onClose={this.toggleViewMAModal}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div className="paper modal-style">
-            <MDBModalHeader>Ministry Arm: {ministry_arm_to_view.name}
-              <br /> Head: {ministry_arm_to_view.ministry_head_details.first_name + " " + ministry_arm_to_view.ministry_head_details.last_name}</MDBModalHeader>
-            <button onClick={this.toggleViewMAModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
-            <form className="add-ministry_arm-form" onSubmit={this.editMinistryArm}>
 
-              <div className="row">
-                <div className="col-md-6 padding-bottom--16">
-                  <label className="form-label">MinistryArm Name</label>
-                  <input
-                    className="form-control"
-                    placeholder="MinistryArm Name"
-                    name="name"
-                    value={ministry_arm_to_view ? ministry_arm_to_view.name : ""}
-                    readOnly={true}
-                  />
-                </div>
-                <div className="col-md-6 padding-bottom--16">
-                  <label className="form-label">Display Name</label>
-                  <input
-                    className="form-control"
-                    placeholder="MinistryArm Name"
-                    name="abbr"
-                    value={ministry_arm_to_view ? ministry_arm_to_view.abbr : ""}
-                    readOnly={true}
-                  />
-                </div>
-
-                <div className="col-md-6 padding-bottom--16">
-                  <label className="form-label">City</label>
-                  <input
-                    name="city"
-                    id="lga"
-                    className="form-control select-lga"
-                    readOnly={true}
-                    value={ministry_arm_to_view ? ministry_arm_to_view.city : ""}
-                  />
-
-                </div>
-
-                <div className="col-md-6 padding-bottom--16">
-                  <label className="form-label">Status</label>
-                  <select
-                    name="ministry_arm-status"
-                    id="ministry_arm-status"
-                    className="form-control"
-                    onChange={(e) => {
-                      this.handleSelectedRole(e);
-                    }}
-                    disabled={true}
-                    value={this.state.req_status ?
-                      this.state.req_status
-                      : ""
-                    }
-                  >
-                    <option value="" defaultValue="selected">
-                      - Select -
-                    </option>
-                    <option value="approve">
-                      Approve
-                    </option>
-
-                    <option value="reject">
-                      Reject
-                    </option>
-
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-12 row mt-15 btns-row">
-                <button
-                  className="add btn-save btn-primary mr-5"
-                  onClick={
-                    () => {
-                      this.toggleViewMAModal();
-                      this.toggleEditMAModal();
-                    }
-                  }
-
-                  type="submit"
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn-cancel btn btn-primary"
-                  onClick={this.toggleViewMAModal}
-                  type="button"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal>
         <Toast
           toastList={this.props.toast.list}
           position="top-right"
@@ -642,6 +544,95 @@ const AllMinistryArms = ({ allMinistryArmProps }) => {
   );
 };
 
+const MinistryArmWorkers = ({workers}) => {
+  console.log("workers", workers);
+  let workersArray = workers;
+
+  let data = workersArray.map((worker) => {
+    return {
+      first_name: `${worker.first_name}`,
+      middle_name: worker.middle_name,
+      last_name: worker.last_name,
+      phone_num: worker.phone_num,
+      role: worker.role,
+      ministry_arms: `${worker.ministry_arm.map(m => m, ",  ")}`,
+
+      action: 
+     // isAuthenticated ? (
+        <ActionButton data={{ id: worker._id, url: "/workers/" }} />
+     // ) : null,
+    };
+  });
+
+  const datatable = {
+    columns: [
+      {
+        label: "First Name",
+        field: "first_name",
+        width: 150,
+        workerributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "Name",
+        },
+      },
+      {
+        label: "Middle Name",
+        field: "middle_name",
+        width: 150,
+        workerributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "Name",
+        },
+      },
+      {
+        label: "Last Name",
+        field: "last_name",
+        width: 150,
+        workerributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "Name",
+        },
+      },
+      {
+        label: "Phone Num",
+        field: "phone_num",
+        width: 270,
+      },
+      {
+        label: "Role",
+        field: "role",
+        width: 270,
+      },
+      {
+        label: "Ministry Arm(s)",
+        field: "ministry_arms",
+        width: 200,
+      },
+
+      {
+        label: "Action",
+        field: "action",
+        sort: "disabled",
+        width: 100,
+      },
+    ],
+    rows: data,
+  };
+
+  return (
+    <MDBDataTableV5
+      hover
+      entriesOptions={[5, 20, 25]}
+      entries={10}
+      pchangesamount={4}
+      data={datatable}
+      pagingTop
+      searchTop
+      searchBottom={false}
+    />
+  );
+};
+
 
 const mapStateToProps = (state) => ({
   ministry_arms: state.fetchData.ministryArms,
@@ -655,7 +646,8 @@ const mapStateToProps = (state) => ({
   logged_in_user: state.auth.user,
   addMASuccess: state.fetchData.addMASuccess,
   editMASuccess: state.fetchData.editMASuccess,
-  deleteMASuccess: state.fetchData.deleteMASuccess
+  deleteMASuccess: state.fetchData.deleteMASuccess,
+  ministry_arm_workers: state.fetchData.ministry_arm_workers
 });
 
 export default connect(mapStateToProps, {

@@ -390,14 +390,6 @@ export const deleteDirectorate = (id) => (dispatch, getState) => {
         );
 };
 
-export const getDirectorate = (id) => (dispatch) => {
-    dispatch(setDirectorateLoading());
-
-    dispatch({
-        type: GET_DIRECTORATE,
-        payload: id,
-    });
-};
 
 export const editDirectorate = (id, directorate) => (dispatch, getState) => {
     let formData = new FormData();
@@ -560,6 +552,16 @@ export const getMinistryArm = (id) => (dispatch) => {
         payload: id,
     });
 };
+
+export const getDirectorate = (id) => (dispatch) => {
+    console.log("id", id);
+    dispatch(setDirectorateLoading());
+
+    dispatch({
+        type: GET_DIRECTORATE,
+        payload: id
+    });
+}
 
 export const editMinistryArm = (id, ministryArm) => (dispatch, getState) => {
     let formData = new FormData();

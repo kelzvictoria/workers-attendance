@@ -106,11 +106,13 @@ const initialState = {
     directorate: [],
     directorates: [],
     directorate_loading: false,
+    directorate_ministries: [],
 
     ministryArm: [],
     ministryArms: [],
     loading: false,
     ministryArm_loading: false,
+    ministry_arm_workers: [],
 
     isEditDirectorateModalOpen: false,
     isViewDirectorateModalOpen: false,
@@ -307,15 +309,36 @@ export default function (state = initialState, action) {
 
             };
 
-        case GET_DIRECTORATE:
-            console.log("action.payload", action.payload);
-            return {
-                ...state,
-                directorate: state.directorates.filter(
-                    (directorate) => directorate.id == action.payload
-                ),
-                directorate_loading: false,
-            };
+            case GET_DIRECTORATE:
+                console.log("action.payload"
+                , action.payload
+                );
+                let directorate = state.directorates.filter(
+                    d => d._id === action.payload
+                )
+    
+                console.log("directorate", directorate);
+    
+                let directorate_name = directorate[0].name;
+                console.log("directorate_name", directorate_name);
+                console.log("state.ministryArms", state.ministryArms);
+                let directorate_ministries = state.ministryArms.filter(
+                    m => m.directorate_details.name === directorate_name 
+                );
+
+                for (let i = 0; i < directorate_ministries.length; i++) {
+                    directorate_ministries[i].workers = 
+                        state.workers.filter(w => w.ministry_arm.includes(directorate_ministries[i].name));
+                }
+    
+                console.log("directorate_ministries", directorate_ministries);
+    
+                return {
+                    ...state,
+                    directorate: directorate,
+                    directorate_loading: false,
+                    directorate_ministries: directorate_ministries
+                }
 
         case DIRECTORATES_LOADING:
             return {
@@ -439,13 +462,27 @@ export default function (state = initialState, action) {
 
         case GET_MINISTRY_ARM:
             console.log("action.payload", action.payload);
+            let ministry_arm = state.ministryArms.filter(
+                (ministryArm) => ministryArm._id == action.payload
+            );
+            console.log("ministry_arm", ministry_arm);
+            let ministry_arm_name = ministry_arm[0].name;
+            console.log("ministry_arm_name", ministry_arm_name);
+            console.log("state.workers", state.workers);
+            let ministry_arm_workers = state.workers.filter(
+                w => w.ministry_arm.includes(ministry_arm_name)
+            )
+
+            console.log("ministry_arm_workers", ministry_arm_workers);
+            
             return {
                 ...state,
-                ministryArm: state.ministryArms.filter(
-                    (ministryArm) => ministryArm._id == action.payload
-                ),
+                ministryArm: ministry_arm,
                 ministryArm_loading: false,
+                ministry_arm_workers: ministry_arm_workers
             };
+
+        
 
         case MINISTRY_ARMS_LOADING:
             return {

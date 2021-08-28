@@ -16,6 +16,8 @@ import LogOut from "./components/auth/LogOut";
 
 import { GroupWork } from "@material-ui/icons";
 import AccountBalance from "@material-ui/icons/AccountBalance";
+import Details from "views/MinistryArm/Details";
+import DirectorateDetails from "views/Directorates/Details"
 
 
 const dashboardRoutes = [
@@ -45,6 +47,21 @@ const dashboardRoutes = [
     name: "Ministry Arms",
     icon: GroupWork,
     component: MinistryArm,
+    layout: "/admin",
+  },
+  {
+    path: "/ministry-arm-details",
+    name: "Ministry Arm Details",
+    icon: GroupWork,
+    component: Details,
+    layout: "/admin",
+  },
+
+  {
+    path: "/directorate-details",
+    name: "Directorate Details",
+    icon: GroupWork,
+    component: DirectorateDetails,
     layout: "/admin",
   },
   {
