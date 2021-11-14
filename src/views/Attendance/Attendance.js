@@ -15,8 +15,7 @@ import ActionButton from "../Actions";
 import CameraIcon from "assets/svgs/camera.svg";
 import { connect } from "react-redux";
 
-import { DatePicker, Space, Popconfirm } from 'antd';
-
+import { DatePicker, Space, Popconfirm, AutoComplete } from "antd";
 
 import NaijaStates from "naija-state-local-government";
 import {
@@ -30,7 +29,7 @@ import {
   resetAddAtt,
   resetEditAtt,
   resetDeleteAtt,
-  getWorkers
+  getWorkers,
 } from "../../actions/fetchDataActions";
 
 import {
@@ -40,22 +39,26 @@ import {
   showAddAttFailToast,
   showEditAttFailToast,
   showDeleteAttFailToast,
-
   showFailToast,
-  showSuccessToast
+  showSuccessToast,
 } from "../../actions/toastActions";
-import Toast from "../../components/toast/Toast"
+import Toast from "../../components/toast/Toast";
 
-import logo from "../../assets/img/logo.png"
+import logo from "../../assets/img/logo.png";
 import generatePDF from "views/Reporting/Generator";
 
 const { RangePicker } = DatePicker;
+
+const { Option } = AutoComplete;
 
 class Attendances extends Component {
   state = {
     openTab: "all-attendances",
     isAddAttModalOpen: false,
-    worker: ''
+    worker: "",
+    searchRes: [],
+    selectedWorker: undefined,
+    workersIDs: [],
   };
 
   constructor(props) {
@@ -72,14 +75,13 @@ class Attendances extends Component {
       let start_date = new Date(day[0]._id).getTime;
       let end_date = new Date(day[1]._id).getTime;
 
-      data = this.props.attendance.attendances.filter(a => {
+      data = this.props.attendance.attendances.filter((a) => {
         let d = new Date(a).getTime;
-        return d >= start_date && d <= end_date
-      })
+        return d >= start_date && d <= end_date;
+      });
       if (data.length) {
-        generatePDF("attendance-range", data)
+        generatePDF("attendance-range", data);
       }
-
     } else {
       let date1 = new Date().toISOString().split("T")[0];
       let date2;
@@ -87,19 +89,20 @@ class Attendances extends Component {
       if (day == "today") {
         date2 = date1;
       } else {
-        date2 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+        date2 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0];
       }
 
-      data = this.props.attendance.attendances.filter(a => {
+      data = this.props.attendance.attendances.filter((a) => {
         //console.log("a", a);
-        return a.date_created.split("T")[0] === date2
+        return a.date_created.split("T")[0] === date2;
       });
       if (data.length) {
-        generatePDF("attendance-range", data)
+        generatePDF("attendance-range", data);
       }
     }
-
-  }
+  };
 
   onChangeTab = (id) => {
     this.setState({
@@ -122,10 +125,18 @@ class Attendances extends Component {
   };
 
   handleSelectedWorker = (e) => {
+    console.log("selected worker", e);
+    const { workers } = this.props.worker;
+    let selected_worker = workers.filter((w) => w._id == e);
+    if (selected_worker.length) {
+      this.setState({
+        selectedWorker: selected_worker[0],
+      });
+    }
     this.setState({
-      worker: e.target.value
-    })
-  }
+      worker: e, //e.target.value,
+    });
+  };
 
   toggleActionsDropdown() {
     this.setState({ isActionsOpen: !this.state.isActionsOpen });
@@ -141,15 +152,18 @@ class Attendances extends Component {
     console.log("here");
     e.preventDefault();
 
-    let worker_d =
-      await this.props.worker.workers.filter(w => w._id === this.state.worker)[0];
+    let worker_d = await this.props.worker.workers.filter(
+      (w) => w._id === this.state.worker
+    )[0];
     console.log("worker_d", worker_d);
 
     const newAttendance = {
-      user_id: this.props.logged_in_user._id ? this.props.logged_in_user._id : this.props.logged_in_user.id,
+      user_id: this.props.logged_in_user._id
+        ? this.props.logged_in_user._id
+        : this.props.logged_in_user.id,
       worker_id: this.state.worker,
       date_created: new Date().toISOString(),
-      worker_details: worker_d
+      worker_details: worker_d,
     };
     console.log("newAttendance", newAttendance);
     this.props.addAttendance(newAttendance);
@@ -164,8 +178,8 @@ class Attendances extends Component {
         user_id: attendance.user_id,
         worker_id: attendance.worker_id,
         date_created: attendance.date_created,
-        worker_details: attendance.worker_details
-      })
+        worker_details: attendance.worker_details,
+      });
     }
   }
 
@@ -182,20 +196,22 @@ class Attendances extends Component {
         user_id: attendance.worker_id,
         worker_id: attendance.worker_id,
         date_created: attendance.date_created,
-        worker_details: attendance.worker_details
-      })
+        worker_details: attendance.worker_details,
+      });
     }
 
-    const { error, addAttSuccess, deleteAttSuccess, editAttSuccess } = this.props;
+    const {
+      error,
+      addAttSuccess,
+      deleteAttSuccess,
+      editAttSuccess,
+    } = this.props;
 
     if (error !== prevProps.error) {
       console.log("error", error);
-      if (error.id
-      ) {
-        this.props.showFailToast(error.msg.msg)
-
+      if (error.id) {
+        this.props.showFailToast(error.msg.msg);
       }
-
     }
 
     if (addAttSuccess) {
@@ -208,47 +224,90 @@ class Attendances extends Component {
     if (deleteAttSuccess) {
       this.props.resetDeleteAtt();
       this.props.getAttendances();
-      this.props.showDeleteAttSuccessToast()
+      this.props.showDeleteAttSuccessToast();
     }
     if (editAttSuccess) {
       this.toggleEditAttModal();
       this.props.resetEditAtt();
       this.props.getAttendances();
-      this.props.showEditAttSuccessToast()
+      this.props.showEditAttSuccessToast();
     }
   }
 
+  handleSearch = (search_val) => {
+    const { workers } = this.props.worker;
+
+    let workersIDs = workers.map((w) => w._id);
+    const options = workers.map((w) => {
+      return {
+        value: w._id,
+        label: w.first_name + " " + w.last_name,
+      };
+    });
+
+    let res;
+
+    if (search_val) {
+      res = options.filter(
+        (option) =>
+          option.label.toUpperCase().indexOf(search_val.toUpperCase()) !== -1
+      );
+    } else {
+      res = options;
+    }
+
+    console.log(" workersIDs ", workersIDs);
+
+    this.setState({
+      searchRes: res,
+      workersIDs: workersIDs,
+    });
+  };
+
   render() {
+    console.log("selectedWorker", this.state.selectedWorker);
     let attendances = this.props.attendance.attendances;
-    const { isEditAttModalOpen, isViewAttModalOpen, attendance } = this.props.attendance;
+    const {
+      isEditAttModalOpen,
+      isViewAttModalOpen,
+      attendance,
+    } = this.props.attendance;
     let today = new Date().toISOString().split("T")[0];
 
-    attendances = attendances.filter(a => a.date_created.split("T")[0] === today)
+    attendances = attendances.filter(
+      (a) => a.date_created.split("T")[0] === today
+    );
     const { workers } = this.props.worker;
     const allAttProps = {
       attendances,
       isAuthenticated: this.props.isAuthenticated,
-      workers
+      workers,
     };
 
     let att_to_edit = attendance ? attendance[0] : "";
+    //  console.log("workersIDs", this.state.workersIDs);
+    // const workersMapping = workers.map((w) => {
+    //   return {
+    //     value: w._id,
+    //     label: w.first_name + " " + w.last_name,
+    //   };
+    // });
+
+    // console.log("options", options);
     //console.log("this.state", this.state);
     //console.log("this.props.logged_in_user", this.props.logged_in_user);
     return (
       <GridContainer>
-
         <GridItem xs={12} sm={12} md={12}>
-
-          <div className="row attendances-row">
-            <div className="col-xs-6 col-sm-6 col-md-6 display--flex">
+          <div className="desktop-view row attendances-row">
+            <div className="col-xs-12 col-sm-5 col-md-6 display--flex">
               <Button
-                className={
-                  `btn btn-primary btn-attendances font-size--14 ${this.state.openTab === "all-attendances" && "active-btn"}`
-                }
+                className={`btn btn-primary btn-attendances font-size--14 ${
+                  this.state.openTab === "all-attendances" && "active-btn"
+                }`}
                 onClick={() => {
                   this.toggleAddAttModal();
-                }
-                }
+                }}
                 id="all-attendances"
               >
                 Mark Attendance
@@ -257,15 +316,13 @@ class Attendances extends Component {
               <Popconfirm
                 onConfirm={() => {
                   this.printAttendance("today");
-                }
-                }
+                }}
                 title="Proceed to print today's attendance？"
                 okText="Yes"
-                cancelText="No">
+                cancelText="No"
+              >
                 <Button
-                  className={
-                    `btn btn-primary btn-print-workers font-size--14`
-                  }
+                  className={`btn btn-primary btn-print-workers font-size--14`}
                   // onClick={() => {
                   //   this.printAttendance("today");
                   // }
@@ -276,18 +333,15 @@ class Attendances extends Component {
                 </Button>
               </Popconfirm>
             </div>
-            <div className="col-xs-6 col-sm-6 col-md-6 display--flex">
+            <div className="col-xs-12 col-sm-7 col-md-6 display--flex">
               <Button
-                className={
-                  `btn btn-primary btn-print-workers font-size--14`
-                }
+                className={`btn btn-primary btn-print-workers font-size--14`}
                 onClick={() => {
                   this.printAttendance("last-meeting");
-                }
-                }
-                id="print-todays-attendance"
+                }}
+                id="print-last-attendance"
               >
-                Print Last's Attendance
+                Print Last Attendance
               </Button>
 
               {/* <Button
@@ -298,32 +352,86 @@ class Attendances extends Component {
                 }
                 id="print-custom-attendance"
               > */}
-              <Space direction="vertical"
-
-                size={12}>
+              <Space direction="vertical" size={12}>
                 <RangePicker
-                  className={
-                    `date-range-picker btn-print-workers font-size--14`
-                  }
+                  className={`date-range-picker btn-print-workers font-size--14`}
                   style={{
                     color: "rgba(0, 0, 0, 0.87) !important;",
-
                   }}
-                  onChange={this.printAttendance} />
+                  onChange={this.printAttendance}
+                />
               </Space>
               {/* Select Meeting Attendance
               </Button> */}
             </div>
           </div>
 
-          <Card>
-            <CardBody> {
-              attendances.length > 0 &&
-              <AllAttendances
-                allAttProps={allAttProps}
-              />
-            }
+          <div className="mobile-view row attendances-row">
+            <div className="col-xs-12 col-sm-5 col-md-6 display--flex">
+              <Button
+                className={`btn btn-primary btn-attendances font-size--14 ${
+                  this.state.openTab === "all-attendances" && "active-btn"
+                }`}
+                onClick={() => {
+                  this.toggleAddAttModal();
+                }}
+                id="all-attendances"
+              >
+                Mark Attendance
+              </Button>
+            </div>
 
+            <div className="col-xs-12 col-sm-5 col-md-6 display--flex margin-y--1">
+              <Popconfirm
+                onConfirm={() => {
+                  this.printAttendance("today");
+                }}
+                title="Proceed to print today's attendance？"
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  className={`btn btn-primary btn-print-workers font-size--14`}
+                  // onClick={() => {
+                  //   this.printAttendance("today");
+                  // }
+                  // }
+                  id="print-todays-attendance"
+                >
+                  Print Today's Attendance
+                </Button>
+              </Popconfirm>
+            </div>
+            <div className="col-xs-12 col-sm-7 col-md-6 display--flex margin-y--1">
+              <Button
+                className={`btn btn-primary btn-print-workers font-size--14`}
+                onClick={() => {
+                  this.printAttendance("last-meeting");
+                }}
+                id="print-todays-attendance"
+              >
+                Print Last's Attendance
+              </Button>
+            </div>
+            <div className="col-xs-12 col-sm-7 col-md-6 display--flex">
+              <Space direction="vertical" size={12}>
+                <RangePicker
+                  className={`date-range-picker btn-print-workers font-size--14`}
+                  style={{
+                    color: "rgba(0, 0, 0, 0.87) !important;",
+                  }}
+                  onChange={this.printAttendance}
+                />
+              </Space>
+            </div>
+          </div>
+
+          <Card>
+            <CardBody>
+              {" "}
+              {attendances.length > 0 && (
+                <AllAttendances allAttProps={allAttProps} />
+              )}
             </CardBody>
           </Card>
         </GridItem>
@@ -335,41 +443,106 @@ class Attendances extends Component {
         >
           <div className="paper modal-style">
             <MDBModalHeader>Add Attendance</MDBModalHeader>
-            <button onClick={this.toggleAddAttModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
-            <form className="add-att-form mt-15" onSubmit={this.addAttendance}>
+            <button
+              onClick={this.toggleAddAttModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span className="sr-only">Close</span>
+            </button>
+            <form className="add-att-form" onSubmit={this.addAttendance}>
               <div className="row">
                 <div className="ttendance padding-bottom--16">
                   <div className="ttendance-logo col-md-3">
                     <img src={logo} />
                   </div>
                   <div className="ttendance-content col-md-9">
-                    <h3>{new Date().toDateString() + " " + new Date().toLocaleTimeString()}</h3>
-                    <select
+                    <h3>
+                      {new Date().toDateString() +
+                        " " +
+                        new Date().toLocaleTimeString()}
+                    </h3>
+
+                    {this.state.selectedWorker &&
+                    this.state.workersIDs.includes(
+                      this.state.selectedWorker._id
+                    ) ? (
+                      <div className="worker-info">
+                        <h3>
+                          {`${this.state.selectedWorker.first_name} ${this.state.selectedWorker.last_name}`}
+                        </h3>
+
+                        <ul>
+                          {this.state.selectedWorker.ministry_arm.map((m) => (
+                            <li>{m}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {/* <select
                       name="worker"
                       id="att-worker"
                       className="form-control"
                       onChange={(e) => {
                         this.handleSelectedWorker(e);
-
-                      }
-                      }
-                      value={this.state.worker ?
-                        this.state.worker
-                        : ""
-                      }
+                      }}
+                      value={this.state.worker ? this.state.worker : ""}
                     >
-                      <option value="">
-                        Select worker
-                      </option>
+                      <option value="">Select worker</option>
 
-                      {workers.map(w => <option value={w._id}>
-                        {w.first_name + " " + w.last_name}
-                      </option>)}
-                    </select>
-
+                      {workers.map((w) => (
+                        <option value={w._id}>
+                          {w.first_name + " " + w.last_name}
+                        </option>
+                      ))}
+                    </select> */}
+                    <AutoComplete
+                      allowClear={true}
+                      style={{
+                        width: 200,
+                      }}
+                      name="worker"
+                      id="att-worker"
+                      className="form-control search-worker"
+                      onChange={(e) => {
+                        this.handleSelectedWorker(e);
+                      }}
+                      // options={options}
+                      placeholder="Begin typing to find worker"
+                      // filterOption={(inputValue, option) =>
+                      //   option.label
+                      //     .toUpperCase()
+                      //     .indexOf(inputValue.toUpperCase()) !== -1
+                      // }
+                      getPopupContainer={(node) => node.parentNode}
+                      // value={
+                      //   this.state.workersIDs.includes(
+                      //     this.state.selectedWorker
+                      //   ) ??
+                      //   `${this.state.selectedWorker.first_name} ${this.state.selectedWorker.last_name}`
+                      // }
+                      // value = {
+                      //   this.state.selectedWorker
+                      // }
+                      onSearch={this.handleSearch}
+                    >
+                      {this.state.searchRes.map((r) => (
+                        <Option
+                          //onClick={(e) => this.handleSelectedWorker(e)}
+                          key={r.value}
+                          value={r.value}
+                        >
+                          {r.label}
+                        </Option>
+                      ))}
+                    </AutoComplete>
                   </div>
                 </div>
-
               </div>
               <div className="col-md-12 row mt-15 btns-row">
                 <button
@@ -383,10 +556,10 @@ class Attendances extends Component {
                 <button
                   className="btn-cancel btn btn-primary"
                   onClick={() => {
-                    this.toggleAddAttModal()
+                    this.toggleAddAttModal();
                     this.setState({
-                      msg: null
-                    })
+                      msg: null,
+                    });
                   }}
                   type="button"
                 >
@@ -405,7 +578,16 @@ class Attendances extends Component {
         >
           <div className="paper modal-style">
             <MDBModalHeader>Edit Attendance</MDBModalHeader>
-            <button onClick={this.toggleEditAttModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
+            <button
+              onClick={this.toggleEditAttModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span class="sr-only">Close</span>
+            </button>
             <form className="add-att-form" onSubmit={this.editAttendance}>
               <div className="att-badge-div">
                 <div className="att-badge">
@@ -413,7 +595,11 @@ class Attendances extends Component {
                     <img
                       id="badge-img"
                       alt="badge"
-                      src={this.state.preview ? this.state.preview : this.state.iconUrl}
+                      src={
+                        this.state.preview
+                          ? this.state.preview
+                          : this.state.iconUrl
+                      }
                     />
                     <input
                       type="file"
@@ -472,31 +658,18 @@ class Attendances extends Component {
                     onChange={(e) => {
                       this.handleSelectedWorker(e);
                     }}
-                    value={this.state.worker ?
-                      this.state.worker
-                      : ""
-                    }
+                    value={this.state.worker ? this.state.worker : ""}
                   >
-                    <option value="">
-                      - Select -
-                    </option>
-                    <option value="approved">
-                      Approved
-                    </option>
+                    <option value="">- Select -</option>
+                    <option value="approved">Approved</option>
 
-                    <option value="rejected">
-                      Rejected
-                    </option>
-
+                    <option value="rejected">Rejected</option>
                   </select>
                 </div>
               </div>
 
               <div className="col-md-12 row mt-15 btns-row">
-                <button
-                  className="add btn-save btn-primary mr-5"
-                  type="submit"
-                >
+                <button className="add btn-save btn-primary mr-5" type="submit">
                   Update
                 </button>
                 <button
@@ -518,7 +691,16 @@ class Attendances extends Component {
         >
           <div className="paper modal-style">
             <MDBModalHeader>View Attendance</MDBModalHeader>
-            <button onClick={this.toggleViewAttModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
+            <button
+              onClick={this.toggleViewAttModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span class="sr-only">Close</span>
+            </button>
             <form className="add-att-form" onSubmit={this.editAttendance}>
               <div className="att-badge-div">
                 <div className="att-badge">
@@ -528,7 +710,6 @@ class Attendances extends Component {
                       alt="badge"
                       src={att_to_edit ? att_to_edit.iconUrl : CameraIcon}
                     />
-
                   </label>
                 </div>
                 <h5>Attendance Badge</h5>
@@ -564,7 +745,6 @@ class Attendances extends Component {
                     readOnly={true}
                     value={att_to_edit ? att_to_edit.city : ""}
                   />
-
                 </div>
 
                 <div className="col-md-6 padding-bottom--16">
@@ -577,35 +757,24 @@ class Attendances extends Component {
                       this.handleSelectedWorker(e);
                     }}
                     disabled={true}
-                    value={this.state.req_status ?
-                      this.state.req_status
-                      : ""
-                    }
+                    value={this.state.req_status ? this.state.req_status : ""}
                   >
                     <option value="" defaultValue="selected">
                       - Select -
                     </option>
-                    <option value="approve">
-                      Approve
-                    </option>
+                    <option value="approve">Approve</option>
 
-                    <option value="reject">
-                      Reject
-                    </option>
-
+                    <option value="reject">Reject</option>
                   </select>
                 </div>
               </div>
               <div className="col-md-12 row mt-15 btns-row">
                 <button
                   className="add btn-save btn-primary mr-5"
-                  onClick={
-                    () => {
-                      this.toggleViewAttModal();
-                      this.toggleEditAttModal();
-                    }
-                  }
-
+                  onClick={() => {
+                    this.toggleViewAttModal();
+                    this.toggleEditAttModal();
+                  }}
                   type="submit"
                 >
                   Edit
@@ -640,7 +809,7 @@ const AllAttendances = ({ allAttProps }) => {
     return {
       name: `${att.worker_details.first_name} ${att.worker_details.middle_name} ${att.worker_details.last_name}`,
       time_in: new Date(`${att.date_created}`).toLocaleTimeString(),
-      ministry_arms: `${att.worker_details.ministry_arm.map(m => m, ",  ")}`,
+      ministry_arms: `${att.worker_details.ministry_arm.map((m) => m, ",  ")}`,
 
       action: isAuthenticated ? (
         <ActionButton data={{ id: att._id, url: "/attendances/" }} />
@@ -694,7 +863,6 @@ const AllAttendances = ({ allAttProps }) => {
   );
 };
 
-
 const mapStateToProps = (state) => ({
   attendance: state.fetchData,
   isAuthenticated: state.auth.isAuthenticated,
@@ -704,7 +872,7 @@ const mapStateToProps = (state) => ({
   logged_in_user: state.auth.user,
   addAttSuccess: state.fetchData.addAttSuccess,
   editAttSuccess: state.fetchData.editAttSuccess,
-  deleteAttSuccess: state.fetchData.deleteAttSuccess
+  deleteAttSuccess: state.fetchData.deleteAttSuccess,
 });
 
 export default connect(mapStateToProps, {
@@ -729,6 +897,5 @@ export default connect(mapStateToProps, {
   showDeleteAttFailToast,
 
   showFailToast,
-  showSuccessToast
-
+  showSuccessToast,
 })(Attendances);

@@ -11,7 +11,7 @@ class LogIn extends Component {
     email: "",
     password: "",
     msg: null,
-    loading: false
+    loading: false,
   };
   static propTypes = {
     isAuthenticated: PropTypes.bool,
@@ -21,8 +21,8 @@ class LogIn extends Component {
 
   goToPreviousPath = () => {
     let history = useHistory();
-    history.goBack()
-  }
+    history.goBack();
+  };
 
   componentDidUpdate(prevProps) {
     const { error, isAuthenticated } = this.props;
@@ -31,17 +31,15 @@ class LogIn extends Component {
         let err_message;
 
         if (error.msg.msg.msg) {
-          err_message = error.msg.msg.msg
-        }
-
-        else if (error.msg.msg) {
-          err_message = error.msg.msg
+          err_message = error.msg.msg.msg;
+        } else if (error.msg.msg) {
+          err_message = error.msg.msg;
         }
         this.setState({ msg: err_message });
       } else {
         this.setState({ msg: null });
       }
-      this.hideLoading()
+      this.hideLoading();
     }
 
     if (isAuthenticated) {
@@ -65,16 +63,14 @@ class LogIn extends Component {
       password,
     };
 
-    if (email, password) {
+    if ((email, password)) {
       //this.showLoading();
       this.setState({
-        loading: true
-      })
+        loading: true,
+      });
     }
 
-
     this.props.login(user);
-
   };
 
   onChange = (e) => {
@@ -86,30 +82,30 @@ class LogIn extends Component {
 
   handleLoading() {
     this.setState({
-      loading: !this.state.loading
-    })
+      loading: !this.state.loading,
+    });
   }
 
   showLoding = () => {
     this.setState({
-      loading: true
-    })
-  }
+      loading: true,
+    });
+  };
 
   hideLoading = () => {
     this.setState({
-      loading: false
-    })
-  }
+      loading: false,
+    });
+  };
 
   render() {
-
     return (
-      <div className="text-center login-dv">
+      <div className="text-center md-login-dv login-dv">
         <form className="login-frm" onSubmit={this.onSubmit}>
-
           <img src={logo} className="mb-4" alt="" width="72" height="72" />
-          <h1 className="h3 mb-3 font-weight-normal">Workers Meeting Attendance</h1>
+          <h1 className="h3 mb-3 font-weight-normal">
+            Workers Meeting Attendance
+          </h1>
           {this.state.msg ? <h5 className="err">{this.state.msg}</h5> : null}
 
           <input
@@ -118,9 +114,9 @@ class LogIn extends Component {
             type="email"
             placeholder="Username"
             onChange={(e) => {
-              this.onChange(e)
+              this.onChange(e);
 
-              this.hideLoading()
+              this.hideLoading();
             }}
           />
 
@@ -130,18 +126,25 @@ class LogIn extends Component {
             type="password"
             placeholder="Password"
             onChange={(e) => {
-              this.onChange(e)
-              this.hideLoading()
+              this.onChange(e);
+              this.hideLoading();
             }}
           />
-          <button className={`btn btn-lg btn-primary btn-block btn-login`}
-            disabled={this.state.loading || this.state.password.length < 4 ? true : false} type="submit">
+          <button
+            className={`btn btn-lg btn-primary btn-block btn-login`}
+            disabled={
+              this.state.loading || this.state.password.length < 4
+                ? true
+                : false
+            }
+            type="submit"
+          >
             {this.state.loading ? "Please wait..." : "Log In"}
           </button>
 
           <p class="mt-5 mb-3 text-muted">&copy; TREM Ejigbo</p>
         </form>
-      </div >
+      </div>
     );
   }
 }
