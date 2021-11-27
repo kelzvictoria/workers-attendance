@@ -4,7 +4,7 @@ import { format } from "date-fns";
 
 const doc = new jsPDF();
 
-const generatePDF = async (entity, data) => {
+const generatePDF = async (entity, data, d) => {
     let tableColumn;
     let tableRows = [];
 
@@ -93,7 +93,10 @@ const generatePDF = async (entity, data) => {
         // }
     })
 
-    const date = new Date().toISOString().split("T")[0].split("-");
+    const date = //new Date().toISOString()
+    d.
+    //split("T")[0].
+    split("-");
     const dateStr = date[2] + "-" +  date[1] + "-" + date[0];
 
     doc.text("Workers", 14, 15);

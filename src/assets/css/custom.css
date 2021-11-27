@@ -1348,10 +1348,80 @@ a[href^="/admin/directorate-details"] {
   }
 
   .modal-style {
-    top: 40% !important;
+    top: 25% !important;
+  }
+
+  .makeStyles-button-54 {
+    padding: 0 !important;
+  }
+
+  .makeStyles-grid-97 {
+    padding: 0 !important;
+  }
+
+  .paper {
+    width: 60% !important;
+  }
+
+  .add-worker-form .col-md-4 {
+    padding-top: 2rem;
+  }
+
+  .add-worker-form .row {
+    padding-bottom: 0rem;
+  }
+
+  .justify--right {
+    justify-content: right;
   }
 }
 
+.makeStyles-searchWrapper-85 {
+  display: none !important;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-text.makeStyles-button-54.makeStyles-white-55.makeStyles-simple-62.makeStyles-buttonLink-71 {
+  display: none;
+}
+
+.makeStyles-manager-84 {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  .login-frm {
+    margin-top: 40px;
+  }
+
+  .login-dv {
+    min-height: 1px !important;
+  }
+
+  .booking-calendar {
+    display: none;
+  }
+
+  .makeStyles-card-210.makeStyles-cardChart-213 {
+    display: none;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 2.2rem !important;
+  }
+
+  .modal-style {
+    top: 30%;
+  }
+
+  .users-row {
+    justify-content: flex-start !important;
+    margin: 0 5px 10px 27px;
+  }
+
+  .justify--right {
+    margin-top: 0.5rem !important;
+  }
+}
 .ttendance-logo.col-md-3 {
   display: none;
 }
@@ -1368,8 +1438,28 @@ a[href^="/admin/directorate-details"] {
   display: none;
 }
 
-.col-xs-12.col-sm-7.col-md-6.display--flex {
-  justify-content: end;
+@media (min-width: 481px) {
+  .col-xs-12.col-sm-7.col-md-6.display--flex {
+    justify-content: end;
+  }
+}
+
+.links {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.back-to-list {
+  color: #ed3237 !important;
+  font-weight: 400;
+  width: 100%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin-bottom: 1.8rem;
+}
+
+#print-custom-attendance {
+  color: #ed3237 !important;
+  outline: none !important;
 }
 
 /* .MuiGrid-root.makeStyles-grid-97.MuiGrid-item.MuiGrid-grid-xs-8.MuiGrid-grid-sm-8.MuiGrid-grid-md-4 {

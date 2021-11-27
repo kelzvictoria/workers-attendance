@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
@@ -59,6 +59,7 @@ class Attendances extends Component {
     searchRes: [],
     selectedWorker: undefined,
     workersIDs: [],
+    isAllView: false,
   };
 
   constructor(props) {
@@ -68,10 +69,10 @@ class Attendances extends Component {
 
   printAttendance = (day) => {
     window.location.reload();
-    console.log("day", day);
     let data;
-
+    console.log("day", day);
     if (typeof day === "object") {
+      console.log("day is object", day);
       let start_date = new Date(day[0]._id).getTime;
       let end_date = new Date(day[1]._id).getTime;
 
@@ -99,7 +100,7 @@ class Attendances extends Component {
         return a.date_created.split("T")[0] === date2;
       });
       if (data.length) {
-        generatePDF("attendance-range", data);
+        generatePDF("attendance-range", data, date1);
       }
     }
   };
@@ -264,9 +265,23 @@ class Attendances extends Component {
     });
   };
 
+  toggleAllView = () => {
+    this.setState({
+      isAllView: !this.state.isAllView,
+    });
+  };
+
   render() {
-    console.log("selectedWorker", this.state.selectedWorker);
-    let attendances = this.props.attendance.attendances;
+    //console.log("selectedWorker", this.state.selectedWorker);
+    let attendances, allAttendance;
+
+    allAttendance = this.props.attendance.attendances;
+    //console.log("allAttendance", allAttendance);
+    let attendanceDays = [
+      ...new Set(allAttendance.map((a) => a.date_created.split("T")[0])),
+    ];
+   // console.log("attendanceDays", attendanceDays);
+
     const {
       isEditAttModalOpen,
       isViewAttModalOpen,
@@ -274,7 +289,7 @@ class Attendances extends Component {
     } = this.props.attendance;
     let today = new Date().toISOString().split("T")[0];
 
-    attendances = attendances.filter(
+    attendances = allAttendance.filter(
       (a) => a.date_created.split("T")[0] === today
     );
     const { workers } = this.props.worker;
@@ -282,6 +297,14 @@ class Attendances extends Component {
       attendances,
       isAuthenticated: this.props.isAuthenticated,
       workers,
+    };
+
+    const listProps = {
+      allAttendance,
+      attendanceDays,
+      isAuthenticated: this.props.isAuthenticated,
+      deleteAttendance: this.props.deleteAttendance,
+      user: this.props.logged_in_user
     };
 
     let att_to_edit = attendance ? attendance[0] : "";
@@ -299,8 +322,10 @@ class Attendances extends Component {
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-          <div className="desktop-view row attendances-row">
-            <div className="col-xs-12 col-sm-5 col-md-6 display--flex">
+          {/* <div className="desktop-view row attendances-row"> */}
+          <div className="row attendances-row">
+            {/* <div className="col-xs-12 col-sm-5 col-md-6 display--flex"> */}
+            <div className="col-xs-12 col-sm-8 col-md-8 display--flex">
               <Button
                 className={`btn btn-primary btn-attendances font-size--14 ${
                   this.state.openTab === "all-attendances" && "active-btn"
@@ -333,7 +358,8 @@ class Attendances extends Component {
                 </Button>
               </Popconfirm>
             </div>
-            <div className="col-xs-12 col-sm-7 col-md-6 display--flex">
+            {/* <div className="col-xs-12 col-sm-7 col-md-6 display--flex"> */}
+            <div className="col-xs-12 col-sm-4 col-md-4 display--flex justify--right">
               <Button
                 className={`btn btn-primary btn-print-workers font-size--14`}
                 onClick={() => {
@@ -344,15 +370,16 @@ class Attendances extends Component {
                 Print Last Attendance
               </Button>
 
-              {/* <Button
-                className={
-                  `btn btn-primary btn-print-workers font-size--14`
-                }
-                onClick={
-                }
+              <Button
+                className={`btn btn-primary btn-print-workers font-size--14`}
+                onClick={() => this.toggleAllView()}
                 id="print-custom-attendance"
-              > */}
-              <Space direction="vertical" size={12}>
+              >
+                {this.state.isAllView
+                  ? "View Today's Attendance"
+                  : "View All Attendance"}
+              </Button>
+              {/* <Space direction="vertical" size={12}>
                 <RangePicker
                   className={`date-range-picker btn-print-workers font-size--14`}
                   style={{
@@ -360,12 +387,10 @@ class Attendances extends Component {
                   }}
                   onChange={this.printAttendance}
                 />
-              </Space>
-              {/* Select Meeting Attendance
-              </Button> */}
+              </Space> */}
             </div>
           </div>
-
+{/* 
           <div className="mobile-view row attendances-row">
             <div className="col-xs-12 col-sm-5 col-md-6 display--flex">
               <Button
@@ -424,13 +449,17 @@ class Attendances extends Component {
                 />
               </Space>
             </div>
-          </div>
+          </div> */}
 
           <Card>
             <CardBody>
               {" "}
-              {attendances.length > 0 && (
-                <AllAttendances allAttProps={allAttProps} />
+              {!this.state.isAllView ? (
+                attendances.length > 0 && (
+                  <AllAttendances allAttProps={allAttProps} />
+                )
+              ) : (
+                <List listProps={listProps} />
               )}
             </CardBody>
           </Card>
@@ -850,6 +879,268 @@ const AllAttendances = ({ allAttProps }) => {
   };
 
   return (
+    <MDBDataTableV5
+      hover
+      entriesOptions={[5, 20, 25]}
+      entries={25}
+      pchangesamount={4}
+      data={datatable}
+      pagingTop
+      searchTop
+      searchBottom={false}
+    />
+  );
+};
+
+const List = ({ listProps }) => {
+  const [isListItemView, setIsListItemView] = useState(false);
+  // const [listItem, setListItem] = useState([]);
+  // const [listItemData, setListItemData] = useState([]);
+  const [listDataTable, setListDataTable] = useState({});
+  const [date, setDate] = useState("");
+
+  const { isAuthenticated, attendanceDays, allAttendance, deleteAttendance, user} = listProps;
+  let group = [];
+
+  let total_no = attendanceDays.length;
+
+  //let isListItemView = false;
+  let listItem, listItemData; //listDataTable;
+
+  if (total_no) {
+    for (let i = 0; i < total_no; i++) {
+      let obj = {
+        date: attendanceDays[i],
+        attendance: allAttendance.filter(
+          (a) => a.date_created.split("T")[0] === attendanceDays[i]
+        ),
+      };
+
+      group.push(obj);
+    }
+  }
+
+  //let attendancesArray = listProps.allAttendance;
+
+  const handleViewAttFromList = (date) => {
+    setDate(date);
+    toggleListView();
+    console.log("group", group);
+    let item = group.filter((g) => g.date === date);
+    listItem = item;
+
+    // setListItem(item);
+    console.log("listItem", listItem);
+    if (listItem.length) {
+      let itemData = listItem[0].attendance.map((att) => {
+        return {
+          name: `${att.worker_details.first_name} ${att.worker_details.middle_name} ${att.worker_details.last_name}`,
+          time_in: new Date(`${att.date_created}`).toLocaleTimeString(),
+          ministry_arms: `${att.worker_details.ministry_arm.map(
+            (m) => m,
+            ",  "
+          )}`,
+
+          action: isAuthenticated ? (
+            <ActionButton data={{ id: att._id, url: "/attendances/" }} />
+          ) : null,
+        };
+      });
+
+      console.log("itemData", itemData);
+      listItemData = itemData;
+      //setListItemData(itemData);
+      let dt = {
+        columns: [
+          {
+            label: "Name",
+            field: "name",
+            width: 150,
+            attributes: {
+              "aria-controls": "DataTable",
+              "aria-label": "Name",
+            },
+          },
+          {
+            label: "Time In",
+            field: "time_in",
+            width: 270,
+          },
+          {
+            label: "Ministry Arm(s)",
+            field: "ministry_arms",
+            width: 200,
+          },
+
+          {
+            label: "Action",
+            field: "action",
+            sort: "disabled",
+            width: 100,
+          },
+        ],
+        rows: listItemData,
+      };
+      // listDataTable = dt;
+      setListDataTable(dt);
+    }
+  };
+
+  const handlePrintAttFromList = (date) => {
+    window.location.reload();
+      let data = allAttendance.filter(
+        (a) => {
+       //   console.log("a.date_created.split('T')[0]", a.date_created.split("T")[0]);
+          return a.date_created.split("T")[0] === date}
+      )
+      if (data.length) {
+        generatePDF("attendance-range", data, date);
+      }
+    //  console.log("date", date, "data",data);
+
+  };
+
+  const deleteAtt = async (id) => {
+   await deleteAttendance(id)
+  }
+
+  const handleDeleteAttFromList = (date) => {
+    let data = allAttendance.filter(
+      (a) => {
+     //   console.log("a.date_created.split('T')[0]", a.date_created.split("T")[0]);
+        return a.date_created.split("T")[0] === date}
+    )
+    let ids = data.map(d => d._id);
+
+    for (let i = 0; i < ids.length; i++) {
+      try {
+        console.log(`deleting ${ids[i]}...`);
+        deleteAtt(ids[i]);
+
+      } catch (err) {
+        console.log(`failed to delete attendance: ${ids[i]}`);
+      }
+    }
+  };
+
+  const toggleListView = () => {
+    // isListItemView = !isListItemView;
+    setIsListItemView(!isListItemView);
+  };
+
+  let data = group.map((att) => {
+    return {
+      date: new Date(att.date).toDateString(),
+      num_of_workers_present: att.attendance.length,
+      view: (
+        <a
+          className="links"
+          //href=""
+          onClick={() => {
+            handleViewAttFromList(att.date);
+          }}
+        >
+          View
+        </a>
+      ),
+      print: (
+        <a
+          className="links"
+          onClick={() => handlePrintAttFromList(att.date)}
+          //href=""
+        >
+          Print
+        </a>
+      ),
+      
+      delete: (
+       user.role.includes("superadmin") ? <Popconfirm
+                onConfirm={() => {
+                  handleDeleteAttFromList(att.date)
+                }}
+                title="Proceed to print delete attendance？"
+                okText="Yes"
+                cancelText="No"
+              >
+               <a
+          className="links"
+          //href="delete"
+         // onClick={() => handleDeleteAttFromList(att.date)}
+        >
+          Delete
+        </a>
+              </Popconfirm> : ""
+       
+      ),
+      // action: isAuthenticated ? (
+      //   <ActionButton data={{ id: att._id, url: "/attendances/" }} />
+      // ) : null,
+    };
+  });
+
+  const datatable = {
+    columns: [
+      {
+        label: "Date",
+        field: "date",
+        width: 150,
+        attributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "Date",
+        },
+      },
+      {
+        label: "No. of Workers Present",
+        field: "num_of_workers_present",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "view",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "print",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "delete",
+        width: 150,
+      },
+      // {
+      //   label: "Action",
+      //   field: "action",
+      //   sort: "disabled",
+      //   width: 100,
+      // },
+    ],
+    rows: data,
+  };
+
+  console.log("isListItemView", isListItemView);
+
+  console.log("listDataTable", listDataTable);
+
+  return isListItemView ? (
+    <div className="att-list-view">
+      <h1> Attendance List for {new Date(date).toDateString()}</h1>
+      <h4 className="links back-to-list" onClick={() => toggleListView()}>
+        Back to list
+      </h4>
+      <MDBDataTableV5
+        hover
+        entriesOptions={[5, 20, 25]}
+        entries={25}
+        pchangesamount={4}
+        data={listDataTable}
+        pagingTop
+        searchTop
+        searchBottom={false}
+      />
+    </div>
+  ) : (
     <MDBDataTableV5
       hover
       entriesOptions={[5, 20, 25]}

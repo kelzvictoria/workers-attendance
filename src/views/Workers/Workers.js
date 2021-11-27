@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select, Radio } from 'antd';
+import { Select, Radio } from "antd";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
@@ -26,7 +26,7 @@ import {
   toggleViewWorkerModal,
   resetAddWorker,
   resetEditWorker,
-  resetDeleteWorker
+  resetDeleteWorker,
 } from "../../actions/fetchDataActions";
 
 import {
@@ -36,22 +36,21 @@ import {
   showAddWorkerFailToast,
   showEditWorkerFailToast,
   showDeleteWorkerFailToast,
-
   showFailToast,
-  showSuccessToast
+  showSuccessToast,
 } from "../../actions/toastActions";
 import Toast from "../../components/toast/Toast";
 
-import generatePDF from '../Reporting/Generator';
+import generatePDF from "../Reporting/Generator";
 
-import logo from "../../assets/img/logo.png"
+import logo from "../../assets/img/logo.png";
 const { Option } = Select;
 
 class Workers extends Component {
   state = {
     openTab: "all-workers",
     isAddWorkerModalOpen: false,
-    worker: '',
+    worker: "",
     worker_id: "",
     ministry_arms_children: [],
     first_name: "",
@@ -60,7 +59,7 @@ class Workers extends Component {
     phone_num: "",
     role: "",
     email_address: "",
-    ministry_arms: []
+    ministry_arms: [],
   };
 
   constructor(props) {
@@ -72,17 +71,16 @@ class Workers extends Component {
     console.log(`Selected: ${value}`, typeof value);
     if (value) {
       this.setState({
-        ministry_arms: value.includes(",") ? value.split(",") : value
-      })
+        ministry_arms: value.includes(",") ? value.split(",") : value,
+      });
     }
-
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
-      [e.target.id]: e.target.value
-    })
-  }
+      [e.target.id]: e.target.value,
+    });
+  };
 
   onChangeTab = (id) => {
     this.setState({
@@ -111,9 +109,9 @@ class Workers extends Component {
 
   handleSelectedRole = (e) => {
     this.setState({
-      role: [e.target.value]
-    })
-  }
+      role: [e.target.value],
+    });
+  };
 
   toggleActionsDropdown() {
     this.setState({ isActionsOpen: !this.state.isActionsOpen });
@@ -133,7 +131,7 @@ class Workers extends Component {
     // console.log("worker_d", worker_d);
     console.log("this.props.logged_in_user", this.props.logged_in_user);
     const newWorker = {
-      worker: '',
+      worker: "",
       first_name: this.state.first_name,
       middle_name: this.state.middle_name,
       last_name: this.state.last_name,
@@ -141,13 +139,17 @@ class Workers extends Component {
       ministry_arm: this.state.ministry_arms,
       role: this.state.role,
       email_address: this.state.email_address,
-      user_id: this.props.logged_in_user._id ? this.props.logged_in_user._id : this.props.logged_in_user.id,
+      user_id: this.props.logged_in_user._id
+        ? this.props.logged_in_user._id
+        : this.props.logged_in_user.id,
     };
 
-    if (newWorker.first_name && newWorker.last_name
+    if (
+      newWorker.first_name &&
+      newWorker.last_name &&
       //&& newWorker.phone_num
-      // && newWorker.ministry_arm.length 
-      && newWorker.role
+      // && newWorker.ministry_arm.length
+      newWorker.role
     ) {
       this.props.addWorker(newWorker);
     }
@@ -167,11 +169,8 @@ class Workers extends Component {
         role: worker.role,
         email_address: worker.email_address,
         user_id: this.props.logged_in_user,
-      })
+      });
     }
-
-
-
   }
 
   async UNSAFE_componentWillMount() {
@@ -187,15 +186,15 @@ class Workers extends Component {
       phone_num: "",
       role: "",
       email_address: "",
-      ministry_arms: []
-    })
-  }
+      ministry_arms: [],
+    });
+  };
 
   editWorker = async (e) => {
     e.preventDefault();
 
     const user = {
-      worker: '',
+      worker: "",
       first_name: this.state.first_name,
       middle_name: this.state.middle_name,
       last_name: this.state.last_name,
@@ -203,17 +202,17 @@ class Workers extends Component {
       ministry_arm: this.state.ministry_arms,
       role: this.state.role,
       email_address: this.state.email_address,
-      user_id: this.props.logged_in_user._id ? this.props.logged_in_user._id : this.props.logged_in_user.id,
+      user_id: this.props.logged_in_user._id
+        ? this.props.logged_in_user._id
+        : this.props.logged_in_user.id,
     };
     console.log("this.state.worker_id", this.state.worker_id);
     this.props.editWorker(this.state.worker_id, user);
   };
 
-
-
   async componentDidUpdate(prevProps) {
     if (toggleEditWorkerModal) {
-      await this.handleMinistryArmMultiSelect()
+      await this.handleMinistryArmMultiSelect();
     }
     if (prevProps.worker.worker != this.props.worker.worker) {
       let worker = this.props.worker.worker[0];
@@ -228,16 +227,20 @@ class Workers extends Component {
         role: worker.role,
         email_address: worker.email_address,
         user_id: this.props.logged_in_user,
-      })
+      });
     }
 
-    const { error, addWorkerSuccess, deleteWorkerSuccess, editWorkerSuccess } = this.props;
+    const {
+      error,
+      addWorkerSuccess,
+      deleteWorkerSuccess,
+      editWorkerSuccess,
+    } = this.props;
 
     if (error !== prevProps.error) {
       console.log("error", error);
-      if (error.id
-      ) {
-        this.props.showFailToast(error.msg.msg)
+      if (error.id) {
+        this.props.showFailToast(error.msg.msg);
       }
     }
 
@@ -251,25 +254,28 @@ class Workers extends Component {
     if (deleteWorkerSuccess) {
       this.props.resetDeleteWorker();
       this.props.getWorkers();
-      this.props.showDeleteWorkerSuccessToast()
+      this.props.showDeleteWorkerSuccessToast();
     }
     if (editWorkerSuccess) {
       this.toggleEditWorkerModal();
       this.props.resetEditWorker();
       this.props.getWorkers();
-      this.props.showEditWorkerSuccessToast()
+      this.props.showEditWorkerSuccessToast();
     }
   }
 
   handleMinistryArmMultiSelect() {
     console.log("this.props.ministry_arm", this.props.ministry_arm);
     let ministry_arms = this.props.ministry_arm
-      ? this.props.ministry_arm.map(m => m.name) : [];
+      ? this.props.ministry_arm.map((m) => m.name)
+      : [];
 
     if (ministry_arms.length > 0) {
       for (let i = 0; i < ministry_arms.length; i++) {
         // console.log("ministry_arms[i]", ministry_arms[i]);
-        this.state.ministry_arms_children.push(<Option key={ministry_arms[i]}>{ministry_arms[i]}</Option>);
+        this.state.ministry_arms_children.push(
+          <Option key={ministry_arms[i]}>{ministry_arms[i]}</Option>
+        );
       }
     }
   }
@@ -277,15 +283,20 @@ class Workers extends Component {
   printWorkersData = () => {
     console.log("ok");
     generatePDF("workers", this.props.worker.workers);
-  }
+  };
 
   render() {
-    const { workers, isEditWorkerModalOpen, isViewWorkerModalOpen, worker } = this.props.worker;
+    const {
+      workers,
+      isEditWorkerModalOpen,
+      isViewWorkerModalOpen,
+      worker,
+    } = this.props.worker;
     // const { workers } = this.props.worker;
     const allWorkerProps = {
       workers,
       isAuthenticated: this.props.isAuthenticated,
-      workers
+      workers,
     };
 
     let worker_to_edit = worker ? worker[0] : "";
@@ -293,58 +304,51 @@ class Workers extends Component {
     console.log("this.state", this.state);
     // console.log("this.props.logged_in_user", this.props.logged_in_user);
     console.log("this.props", this.props);
-    console.log("this.state.ministry_arms_children", this.state.ministry_arms_children);
+    console.log(
+      "this.state.ministry_arms_children",
+      this.state.ministry_arms_children
+    );
 
     return (
       <GridContainer>
-
         <GridItem xs={12} sm={12} md={12}>
-
           <div className="row workers-row">
             <div className="col-xs-6 col-sm-6 col-md-6">
               <Button
-                className={
-                  `btn btn-primary btn-workers font-size--14 ${this.state.openTab === "all-workers" && "active-btn"}`
-                }
+                className={`btn btn-primary btn-workers font-size--14 ${
+                  this.state.openTab === "all-workers" && "active-btn"
+                }`}
                 onClick={() => {
                   this.toggleAddWorkerModal();
-                  this.handleMinistryArmMultiSelect()
-                }
-                }
+                  this.handleMinistryArmMultiSelect();
+                }}
                 id="all-workers"
               >
                 Add Worker
               </Button>
             </div>
             <div className="col-xs-6 col-sm-6 col-md-6">
-
               <Button
-                className={
-                  `btn btn-primary btn-print-workers font-size--14
+                className={`btn btn-primary btn-print-workers font-size--14
        
-                   `
-                }
+                   `}
                 onClick={() => {
                   this.printWorkersData();
                   // this.handleMinistryArmMultiSelect()
-                }
-                }
-              //id="all-workers"
+                }}
+                //id="all-workers"
               >
                 Print
               </Button>
-
             </div>
           </div>
 
           <Card>
-            <CardBody> {
-              workers.length > 0 &&
-              <AllWorkers
-                allWorkerProps={allWorkerProps}
-              />
-            }
-
+            <CardBody>
+              {" "}
+              {workers.length > 0 && (
+                <AllWorkers allWorkerProps={allWorkerProps} />
+              )}
             </CardBody>
           </Card>
         </GridItem>
@@ -356,7 +360,16 @@ class Workers extends Component {
         >
           <div className="add-worker-paper paper modal-style">
             <MDBModalHeader>Add Worker</MDBModalHeader>
-            <button onClick={this.toggleAddWorkerModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
+            <button
+              onClick={this.toggleAddWorkerModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span class="sr-only">Close</span>
+            </button>
             <form className="add-worker-form mt-15" onSubmit={this.addWorker}>
               <div className="row">
                 <div className="col-md-12">
@@ -366,70 +379,79 @@ class Workers extends Component {
                     placeholder="Please select ministry arm(s)"
                     // defaultValue={['a10', 'c12']}
                     onChange={this.handleSelectedMinistryArms}
-                    style={{ width: '100%' }}
-                    getPopupContainer={node => node.parentNode}
+                    style={{ width: "100%" }}
+                    getPopupContainer={(node) => node.parentNode}
                   >
                     {this.state.ministry_arms_children}
                   </Select>
                 </div>
-
               </div>
 
               <div className="row">
                 <div className="col-md-4">
-                  <input className="form-control" name="first_name" id="first_name"
+                  <input
+                    className="form-control"
+                    name="first_name"
+                    id="first_name"
                     placeholder="Enter First Name"
                     onChange={this.handleChange}
                   />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="middle_name" id="middle_name"
+                  <input
+                    className="form-control"
+                    name="middle_name"
+                    id="middle_name"
                     placeholder="Enter Middle Name"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="last_name" id="last_name"
+                  <input
+                    className="form-control"
+                    name="last_name"
+                    id="last_name"
                     placeholder="Enter Last Name"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
               </div>
 
               <div className="row">
                 <div className="col-md-4">
-                  <input className="form-control" name="email_address" id="email_address"
+                  <input
+                    className="form-control"
+                    name="email_address"
+                    id="email_address"
                     placeholder="Enter Email Address"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="phone_num" id="phone_num"
+                  <input
+                    className="form-control"
+                    name="phone_num"
+                    id="phone_num"
                     placeholder="Enter Phone Number"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-
                   <select
                     name="worker"
                     id="worker-worker"
                     className="form-control"
                     onChange={(e) => {
                       this.handleSelectedRole(e);
-
-                    }
-                    }
-                    value={this.state.role ?
-                      this.state.role
-                      : ""
-                    }
+                    }}
+                    value={this.state.role ? this.state.role : ""}
                   >
-                    <option value="">
-                      Select role
-                    </option>
+                    <option value="">Select role</option>
 
-                    {this.roles.map(w => <option value={w}>
-                      {w}
-                    </option>)}
+                    {this.roles.map((w) => (
+                      <option value={w}>{w}</option>
+                    ))}
                   </select>
-
                 </div>
               </div>
 
@@ -444,10 +466,10 @@ class Workers extends Component {
                 <button
                   className="btn-cancel btn btn-primary"
                   onClick={() => {
-                    this.toggleAddWorkerModal()
+                    this.toggleAddWorkerModal();
                     this.setState({
-                      msg: null
-                    })
+                      msg: null,
+                    });
                   }}
                   type="button"
                 >
@@ -466,9 +488,17 @@ class Workers extends Component {
         >
           <div className="paper modal-style">
             <MDBModalHeader>Edit Worker</MDBModalHeader>
-            <button onClick={this.toggleEditWorkerModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
+            <button
+              onClick={this.toggleEditWorkerModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span class="sr-only">Close</span>
+            </button>
             <form className="add-worker-form" onSubmit={this.editWorker}>
-
               <div className="row">
                 <div className="col-md-12">
                   <Select
@@ -476,55 +506,70 @@ class Workers extends Component {
                     size="large"
                     placeholder="Please select ministry arm(s)"
                     value={this.state.ministry_arms}
-                    onChange={
-                      this.handleSelectedMinistryArms
-                    }
-                    style={{ width: '100%' }}
-                    getPopupContainer={node => node.parentNode}
+                    onChange={this.handleSelectedMinistryArms}
+                    style={{ width: "100%" }}
+                    getPopupContainer={(node) => node.parentNode}
                   >
                     {this.state.ministry_arms_children}
                   </Select>
                 </div>
-
               </div>
 
               <div className="row">
                 <div className="col-md-4">
-                  <input className="form-control" name="first_name" id="first_name"
+                  <input
+                    className="form-control"
+                    name="first_name"
+                    id="first_name"
                     placeholder="Enter First Name"
                     value={this.state.first_name}
                     onChange={this.handleChange}
                   />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="middle_name" id="middle_name"
+                  <input
+                    className="form-control"
+                    name="middle_name"
+                    id="middle_name"
                     placeholder="Enter Middle Name"
                     value={this.state.middle_name}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="last_name" id="last_name"
+                  <input
+                    className="form-control"
+                    name="last_name"
+                    id="last_name"
                     placeholder="Enter Last Name"
                     value={this.state.last_name}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
               </div>
 
               <div className="row">
                 <div className="col-md-4">
-                  <input className="form-control" name="email_address" id="email_address"
+                  <input
+                    className="form-control"
+                    name="email_address"
+                    id="email_address"
                     placeholder="Enter Email Address"
                     value={this.state.email_address}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-                  <input className="form-control" name="phone_num" id="phone_num"
+                  <input
+                    className="form-control"
+                    name="phone_num"
+                    id="phone_num"
                     placeholder="Enter Phone Number"
                     value={this.state.phone_num}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="col-md-4">
-
                   <select
                     name="worker"
                     id="worker-worker"
@@ -532,23 +577,15 @@ class Workers extends Component {
                     className="form-control"
                     onChange={(e) => {
                       this.handleSelectedRole(e);
-
-                    }
-                    }
-                    value={this.state.role ?
-                      this.state.role
-                      : ""
-                    }
+                    }}
+                    value={this.state.role ? this.state.role : ""}
                   >
-                    <option value="">
-                      Select role
-                    </option>
+                    <option value="">Select role</option>
 
-                    {this.roles.map(w => <option value={w}>
-                      {w}
-                    </option>)}
+                    {this.roles.map((w) => (
+                      <option value={w}>{w}</option>
+                    ))}
                   </select>
-
                 </div>
               </div>
 
@@ -563,17 +600,16 @@ class Workers extends Component {
                 <button
                   className="btn-cancel btn btn-primary"
                   onClick={() => {
-                    this.toggleEditWorkerModal()
+                    this.toggleEditWorkerModal();
                     this.setState({
-                      msg: null
-                    })
+                      msg: null,
+                    });
                   }}
                   type="button"
                 >
                   Cancel
                 </button>
               </div>
-
             </form>
           </div>
         </Modal>
@@ -585,7 +621,16 @@ class Workers extends Component {
         >
           <div className="paper modal-style">
             <MDBModalHeader>View Worker</MDBModalHeader>
-            <button onClick={this.toggleViewWorkerModal} type="button" class="close"><span aria-hidden="true" className="x">×</span><span class="sr-only">Close</span></button>
+            <button
+              onClick={this.toggleViewWorkerModal}
+              type="button"
+              class="close"
+            >
+              <span aria-hidden="true" className="x">
+                ×
+              </span>
+              <span class="sr-only">Close</span>
+            </button>
             <form className="add-worker-form" onSubmit={this.editWorker}>
               <div className="worker-badge-div">
                 <div className="worker-badge">
@@ -595,7 +640,6 @@ class Workers extends Component {
                       alt="badge"
                       src={worker_to_edit ? worker_to_edit.iconUrl : CameraIcon}
                     />
-
                   </label>
                 </div>
                 <h5>Worker Badge</h5>
@@ -631,7 +675,6 @@ class Workers extends Component {
                     readOnly={true}
                     value={worker_to_edit ? worker_to_edit.city : ""}
                   />
-
                 </div>
 
                 <div className="col-md-6 padding-bottom--16">
@@ -644,35 +687,24 @@ class Workers extends Component {
                       this.handleSelectedRole(e);
                     }}
                     disabled={true}
-                    value={this.state.req_status ?
-                      this.state.req_status
-                      : ""
-                    }
+                    value={this.state.req_status ? this.state.req_status : ""}
                   >
                     <option value="" defaultValue="selected">
                       - Select -
                     </option>
-                    <option value="approve">
-                      Approve
-                    </option>
+                    <option value="approve">Approve</option>
 
-                    <option value="reject">
-                      Reject
-                    </option>
-
+                    <option value="reject">Reject</option>
                   </select>
                 </div>
               </div>
               <div className="col-md-12 row mt-15 btns-row">
                 <button
                   className="add btn-save btn-primary mr-5"
-                  onClick={
-                    () => {
-                      this.toggleViewWorkerModal();
-                      this.toggleEditWorkerModal();
-                    }
-                  }
-
+                  onClick={() => {
+                    this.toggleViewWorkerModal();
+                    this.toggleEditWorkerModal();
+                  }}
                   type="submit"
                 >
                   Edit
@@ -706,11 +738,11 @@ const AllWorkers = ({ allWorkerProps }) => {
   let data = workersArray.map((worker) => {
     return {
       first_name: `${worker.first_name}`,
-      middle_name: worker.middle_name,
+      // middle_name: worker.middle_name,
       last_name: worker.last_name,
       phone_num: worker.phone_num,
       role: worker.role,
-      ministry_arms: `${worker.ministry_arm.map(m => m, ",  ")}`,
+      ministry_arms: `${worker.ministry_arm.map((m) => m, ",  ")}`,
 
       action: isAuthenticated ? (
         <ActionButton data={{ id: worker._id, url: "/workers/" }} />
@@ -729,15 +761,15 @@ const AllWorkers = ({ allWorkerProps }) => {
           "aria-label": "Name",
         },
       },
-      {
-        label: "Middle Name",
-        field: "middle_name",
-        width: 150,
-        workerributes: {
-          "aria-controls": "DataTable",
-          "aria-label": "Name",
-        },
-      },
+      // {
+      //   label: "Middle Name",
+      //   field: "middle_name",
+      //   width: 150,
+      //   workerributes: {
+      //     "aria-controls": "DataTable",
+      //     "aria-label": "Name",
+      //   },
+      // },
       {
         label: "Last Name",
         field: "last_name",
@@ -787,7 +819,6 @@ const AllWorkers = ({ allWorkerProps }) => {
   );
 };
 
-
 const mapStateToProps = (state) => ({
   worker: state.fetchData,
   ministry_arm: state.fetchData.ministryArms,
@@ -798,7 +829,7 @@ const mapStateToProps = (state) => ({
   logged_in_user: state.auth.user,
   addWorkerSuccess: state.fetchData.addWorkerSuccess,
   editWorkerSuccess: state.fetchData.editWorkerSuccess,
-  deleteWorkerSuccess: state.fetchData.deleteWorkerSuccess
+  deleteWorkerSuccess: state.fetchData.deleteWorkerSuccess,
 });
 
 export default connect(mapStateToProps, {
@@ -823,6 +854,5 @@ export default connect(mapStateToProps, {
   showDeleteWorkerFailToast,
 
   showFailToast,
-  showSuccessToast
-
+  showSuccessToast,
 })(Workers);

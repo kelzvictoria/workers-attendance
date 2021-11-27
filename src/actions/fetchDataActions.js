@@ -104,7 +104,7 @@ export const getAttendances = () => async (dispatch, getState) => {
     let workers = getState().fetchData.workers;
 
     let attendances = [];
-    console.log("workers", workers);
+   // console.log("workers", workers);
     axios
         .get(`${API_Server}/attendance`, tokenConfig(getState))
         .then((res) => {
