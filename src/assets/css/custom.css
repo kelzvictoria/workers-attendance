@@ -1223,6 +1223,9 @@ form.add-worker-form {
 }
 
 @media (min-width: 700px) {
+  .justify--right {
+    justify-content: right;
+  }
   .paper {
     width: 60%;
   }
