@@ -9,6 +9,7 @@ import ministryArmReducer from "./ministryArmReducer";
 import directoratesReducer from "./directoratesReducer";
 import toastReducer from "./toastReducer";
 import fetchDataReducer from "./fetchDataReducer";
+import campMeetingReducer from "./campMeetingReducer";
 
 export default combineReducers({
   // attendance: attendanceReducer,
@@ -20,5 +21,6 @@ export default combineReducers({
   // ministryArm: ministryArmReducer,
   // directorate: directoratesReducer,
   toast: toastReducer,
-  fetchData: fetchDataReducer
+  fetchData: fetchDataReducer,
+  // campMeetingReducer,
 });

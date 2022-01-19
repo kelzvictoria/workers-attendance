@@ -1,149 +1,170 @@
 import * as ToastTypes from "../actions/types";
-import { showToast } from "../components/toast/utils"
+import { showToast } from "../components/toast/utils";
 
 export const showAddAttSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_ATT_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Attendance has been recorded successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_ATT_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Attendance has been recorded successfully."
+    ),
+  });
+};
 
 export const showEditAttSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_ATT_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Attendance has been updated successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_ATT_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Attendance has been updated successfully."
+    ),
+  });
+};
 
 export const showDeleteAttSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_ATT_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Attendance has been deleted successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_ATT_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Attendance has been deleted successfully."
+    ),
+  });
+};
 
 export const showAddAttFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_ATT_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_ATT_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showEditAttFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_ATT_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_ATT_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showDeleteAttFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_ATT_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_ATT_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showAddUserSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_USER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "User has been added successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_USER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "User has been added successfully."
+    ),
+  });
+};
 
 export const showAddUserFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_USER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_USER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showDeleteUserSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_USER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "User has been deleted successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_USER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "User has been deleted successfully."
+    ),
+  });
+};
 
 export const showDeleteUserFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_USER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_USER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showEditUserSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_USER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "User has been updated successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_USER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "User has been updated successfully."
+    ),
+  });
+};
 
 export const showEditUserFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_USER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_USER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showEditWorkerSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_WORKER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Worker has been updated successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_WORKER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Worker has been updated successfully."
+    ),
+  });
+};
 
 export const showEditWorkerFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_WORKER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_WORKER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showFailToast = (error) => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_FAIL_TOAST,
-        payload: showToast("danger", "Error", error),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_FAIL_TOAST,
+    payload: showToast("danger", "Error", error),
+  });
+};
 
 export const showSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_SUCCESS_TOAST,
-        payload: showToast("success", "Action completed successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_SUCCESS_TOAST,
+    payload: showToast("success", "Action completed successfully."),
+  });
+};
 
 export const showRestoreWorkerSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_RESTORE_WORKER_SUCCESS_TOAST,
-        payload: showToast("success", "Worker restored successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_RESTORE_WORKER_SUCCESS_TOAST,
+    payload: showToast("success", "Worker restored successfully."),
+  });
+};
 
 export const showRestoreWorkerFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_RESTORE_WORKER_FAIL_TOAST,
-        payload: showToast("success", "An error occurred."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_RESTORE_WORKER_FAIL_TOAST,
+    payload: showToast("success", "An error occurred."),
+  });
+};
 
 export const showAddWorkerSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_WORKER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Worker has been added successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_WORKER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Worker has been added successfully."
+    ),
+  });
+};
 
 // export const showEditWorkerSuccessToast = () => (dispatch, getState) => {
 //     dispatch({
@@ -153,20 +174,22 @@ export const showAddWorkerSuccessToast = () => (dispatch, getState) => {
 // }
 
 export const showDeleteWorkerSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_WORKER_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Worker has been deleted successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_WORKER_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Worker has been deleted successfully."
+    ),
+  });
+};
 
 export const showAddWorkerFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_WORKER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_WORKER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 // export const showEditWorkerFailToast = () => (dispatch, getState) => {
 //     dispatch({
@@ -177,123 +200,243 @@ export const showAddWorkerFailToast = () => (dispatch, getState) => {
 // }
 
 export const showDeleteWorkerFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_WORKER_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_WORKER_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 //
 
 export const showRestoreMASuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_RESTORE_MA_SUCCESS_TOAST,
-        payload: showToast("success", "Ministry Arm restored successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_RESTORE_MA_SUCCESS_TOAST,
+    payload: showToast("success", "Ministry Arm restored successfully."),
+  });
+};
 
 export const showRestoreMAFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_RESTORE_MA_FAIL_TOAST,
-        payload: showToast("success", "An error occurred."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_RESTORE_MA_FAIL_TOAST,
+    payload: showToast("success", "An error occurred."),
+  });
+};
 
 export const showAddMASuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_MA_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Ministry Arm has been added successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_MA_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Ministry Arm has been added successfully."
+    ),
+  });
+};
 
 export const showEditMASuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_MA_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Ministry Arm has been updated successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_MA_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Ministry Arm has been updated successfully."
+    ),
+  });
+};
 
 export const showDeleteMASuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_MA_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Ministry has been deleted successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_MA_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Ministry has been deleted successfully."
+    ),
+  });
+};
 
 export const showAddMAFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_MA_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_MA_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showDeleteMAFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_MA_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_MA_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showEditMAFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_MA_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_MA_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 //
 export const showAddDirectorateSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_DIRECTORATE_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Directorate has been added successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_DIRECTORATE_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Directorate has been added successfully."
+    ),
+  });
+};
 
 export const showEditDirectorateSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_DIRECTORATE_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Directorate has been updated successfully."),
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_DIRECTORATE_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Directorate has been updated successfully."
+    ),
+  });
+};
 
 export const showDeleteDirectorateSuccessToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_DIRECTORATE_SUCCESS_TOAST,
-        payload: showToast("success", "Success", "Directorate has been deleted successfully."),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_DIRECTORATE_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Directorate has been deleted successfully."
+    ),
+  });
+};
 
 export const showAddDirectorateFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_ADD_DIRECTORATE_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_ADD_DIRECTORATE_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showDeleteDirectorateFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_DELETE_DIRECTORATE_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
-
-    })
-}
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_DIRECTORATE_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
 export const showEditDirectorateFailToast = () => (dispatch, getState) => {
-    dispatch({
-        type: ToastTypes.SHOW_EDIT_DIRECTORATE_FAIL_TOAST,
-        payload: showToast("danger", "Error", "An error occured"),
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_DIRECTORATE_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 
-    })
-}
+export const showAddCMSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_ADD_CM_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Camp Meeting Attendance has been recorded successfully."
+    ),
+  });
+};
+
+export const showEditCMSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_CM_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Camp Meeting has been updated successfully."
+    ),
+  });
+};
+
+export const showDeleteCMSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_CM_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Camp Meeting has been deleted successfully."
+    ),
+  });
+};
+
+export const showAddCMFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_ADD_CM_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
+
+export const showEditCMFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_CM_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
+
+export const showDeleteCMFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_CM_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
+//
+
+export const showAddCMRegSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_ADD_CM_REG_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Worker has been registered successfully."
+    ),
+  });
+};
+
+export const showEditCMRegSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_CM_REG_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Camp Meeting has been updated successfully."
+    ),
+  });
+};
+
+export const showDeleteCMRegSuccessToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_CM_REG_SUCCESS_TOAST,
+    payload: showToast(
+      "success",
+      "Success",
+      "Camp Meeting has been deleted successfully."
+    ),
+  });
+};
+
+export const showAddCMRegFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_ADD_CM_REG_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
+
+export const showEditCMRegFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_EDIT_CM_REG_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
+
+export const showDeleteCMRegFailToast = () => (dispatch, getState) => {
+  dispatch({
+    type: ToastTypes.SHOW_DELETE_CM_REG_FAIL_TOAST,
+    payload: showToast("danger", "Error", "An error occured"),
+  });
+};
 //

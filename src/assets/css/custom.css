@@ -1429,8 +1429,9 @@ a[href^="/admin/directorate-details"] {
   display: none;
 }
 
-.ttendance-content.col-md-9 {
-  padding: 0px;
+.ttendance-content.col-md-12
+/* .col-md-9  */ {
+  padding: 0px !important;
 }
 
 .search-worker {
@@ -1463,6 +1464,14 @@ a[href^="/admin/directorate-details"] {
 #print-custom-attendance {
   color: #ed3237 !important;
   outline: none !important;
+}
+
+.btn-link {
+  color: #0984e3;
+}
+
+.margin-right_0_5 {
+  margin-right: 0.5rem !important;
 }
 
 /* .MuiGrid-root.makeStyles-grid-97.MuiGrid-item.MuiGrid-grid-xs-8.MuiGrid-grid-sm-8.MuiGrid-grid-md-4 {

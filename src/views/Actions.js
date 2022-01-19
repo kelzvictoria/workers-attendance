@@ -2,23 +2,23 @@ import React, { Component } from "react";
 import {
   deleteAttendance,
   getAttendance,
-
   toggleEditAttModal,
   toggleViewAttModal,
-
+  deleteCampMeeting,
+  deleteCampMeetingReg,
 } from "../actions/fetchDataActions";
 
 import {
   getMinistryArm,
   toggleViewMAModal,
-  getDirectorate
-} from "../actions/fetchDataActions"
+  getDirectorate,
+} from "../actions/fetchDataActions";
 
 import {
   deleteUser,
   getUser,
   toggleEditUserModal,
-  toggleViewUserModal
+  toggleViewUserModal,
 } from "../actions/userActions";
 
 import {
@@ -33,15 +33,14 @@ import {
 import {
   deleteMinistryArm,
   deleteDirectorate,
-
 } from "../actions/fetchDataActions";
 
 import { connect } from "react-redux";
 
 import { withRouter } from "react-router-dom";
 
-import onClickOutside from 'react-onclickoutside';
-import { Popconfirm } from 'antd';
+import onClickOutside from "react-onclickoutside";
+import { Popconfirm } from "antd";
 
 class ActionButton extends Component {
   constructor(props) {
@@ -49,15 +48,13 @@ class ActionButton extends Component {
     this.state = {
       isActionsOpen: false,
       loadAtt: false,
-      actionList: [
-
-      ]
+      actionList: [],
     };
   }
 
   handleClickOutside = () => {
     this.handleBlur();
-  }
+  };
 
   toggleActionsDropdown = () => {
     this.setState({
@@ -92,7 +89,7 @@ class ActionButton extends Component {
         break;
 
       default:
-        console.log("view was clicked")
+        console.log("view was clicked");
         break;
     }
   };
@@ -125,9 +122,8 @@ class ActionButton extends Component {
         this.props.toggleEditAttModal(id);
         break;
 
-
       default:
-        console.log("Edit was clicked")
+        console.log("Edit was clicked");
         break;
     }
   };
@@ -137,43 +133,45 @@ class ActionButton extends Component {
 
     switch (url) {
       case "/attendances/":
-        this.props.deleteAttendance(id)
+        this.props.deleteAttendance(id);
         this.handleBlur();
         break;
 
       case "/users/":
-        this.props.deleteUser(id)
+        this.props.deleteUser(id);
         this.handleBlur();
         break;
 
       case "/workers/":
-        this.props.deleteWorker(id)
+        this.props.deleteWorker(id);
         this.handleBlur();
         break;
 
       case "/dash-workers/":
-        this.props.deleteWorker(id)
+        this.props.deleteWorker(id);
         this.handleBlur();
         break;
 
       case "/dash-attendances/":
-        this.props.deleteAttendance(id)
+        this.props.deleteAttendance(id);
         this.handleBlur();
         break;
       case "/ministry-arms/":
-        this.props.deleteMinistryArm(id)
+        this.props.deleteMinistryArm(id);
         this.handleBlur();
         break;
       case "/directorates/":
-        this.props.deleteDirectorate(id)
+        this.props.deleteDirectorate(id);
+        this.handleBlur();
+        break;
+      case "/camp-reg/":
+        this.props.deleteCampMeetingReg(id);
         this.handleBlur();
         break;
       default:
-        console.log("delete was clicked")
+        console.log("delete was clicked");
         break;
     }
-
-
   };
 
   handleBlur = () => {
@@ -207,28 +205,27 @@ class ActionButton extends Component {
 
   goToWorkers = () => {
     this.props.history.push({
-      pathname: "/admin/workers"
-    })
-  }
+      pathname: "/admin/workers",
+    });
+  };
 
   goToAttendances = () => {
     this.props.history.push({
-      pathname: "/admin/attendances"
-    })
-  }
+      pathname: "/admin/attendances",
+    });
+  };
 
   goToMinistryArms = (id) => {
     this.props.history.push({
-      pathname: `/admin/ministry-arm-details/${id}`
-    })
-  }
+      pathname: `/admin/ministry-arm-details/${id}`,
+    });
+  };
 
   goToDirectorates = (id) => {
-    
     this.props.history.push({
-      pathname: `/admin/directorate-details/${id}`
-    })
-  }
+      pathname: `/admin/directorate-details/${id}`,
+    });
+  };
 
   // handleEditUser(id) {
   //   this.props.editUser(id)
@@ -241,7 +238,6 @@ class ActionButton extends Component {
   // handleEditWorker(id) {
   //   this.props.editWorker(id)
   // }
-
 
   render() {
     //console.log("this.state", this.state);
@@ -263,9 +259,7 @@ class ActionButton extends Component {
         <a
           className="btn btn-icon-only
          btn-xs btn-row-action"
-
           id=""
-
           onClick={this.toggleActionsDropdown}
         >
           <span className="md-click-circle md-click-animate"></span>
@@ -274,7 +268,6 @@ class ActionButton extends Component {
         <ul className="dropdown-menu pull-left">
           <li>
             <a
-
               id=""
               className=""
               onMouseDown={this.handleView.bind(this, id, url)}
@@ -284,7 +277,6 @@ class ActionButton extends Component {
           </li>
           <li>
             <a
-
               id=""
               className=""
               onMouseDown={this.handleEdit.bind(this, id, url)}
@@ -293,23 +285,21 @@ class ActionButton extends Component {
             </a>
           </li>
           {
-            user_role[0] === "superadmin" &&
-
-            // <Popconfirm title="Are you sure？" okText="Yes" cancelText="No">
-            <li>
-              <a
-
-                id=""
-                className=""
-                onMouseDown={this.handleDelete.bind(this, id, url)}
-              >
-                Delete
-              </a>
-            </li>
+            user_role[0] === "superadmin" && (
+              // <Popconfirm title="Are you sure？" okText="Yes" cancelText="No">
+              <li>
+                <a
+                  id=""
+                  className=""
+                  onMouseDown={this.handleDelete.bind(this, id, url)}
+                >
+                  Delete
+                </a>
+              </li>
+            )
             // </Popconfirm>
-
-
-          } </ul>
+          }{" "}
+        </ul>
       </div>
     );
   }
@@ -321,27 +311,31 @@ const mapStateToProps = (state) => ({
   user: state.user,
   worker: state.worker,
   auth: state.auth,
-  ministry_arm: state.ministry_arm
+  ministry_arm: state.ministry_arm,
 });
 
-export default withRouter(connect(mapStateToProps, {
-  deleteAttendance,
-  toggleEditAttModal,
-  toggleViewAttModal,
-  getAttendance,
-  deleteUser,
-  toggleEditUserModal,
-  toggleViewUserModal,
-  getUser,
-  getWorker,
-  editWorker,
-  deleteWorker,
-  toggleEditWorkerModal,
-  toggleViewWorkerModal,
-  deleteMinistryArm,
-  deleteDirectorate,
-  getMinistryArm,
-  toggleViewMAModal,
-  getDirectorate
-  // getAttendances,
-})(onClickOutside(ActionButton)));
+export default withRouter(
+  connect(mapStateToProps, {
+    deleteAttendance,
+    toggleEditAttModal,
+    toggleViewAttModal,
+    getAttendance,
+    deleteCampMeeting,
+    deleteCampMeetingReg,
+    deleteUser,
+    toggleEditUserModal,
+    toggleViewUserModal,
+    getUser,
+    getWorker,
+    editWorker,
+    deleteWorker,
+    toggleEditWorkerModal,
+    toggleViewWorkerModal,
+    deleteMinistryArm,
+    deleteDirectorate,
+    getMinistryArm,
+    toggleViewMAModal,
+    getDirectorate,
+    // getAttendances,
+  })(onClickOutside(ActionButton))
+);
