@@ -549,7 +549,7 @@ class CampMeetings extends Component {
                 id="print-custom-campMeeting"
               >
                 {this.state.isAllView
-                  ? "View Today's Attendance"
+                  ? "View Registered Workers"
                   : "View All Attendance"}
               </Button>
               {/* <Space direction="vertical" size={12}>
@@ -562,6 +562,12 @@ class CampMeetings extends Component {
                 />
               </Space> */}
             </div>
+          </div>
+
+          <div className="row campMeetings-row title_22">
+            {this.state.isAllView
+              ? "All Camp Meeting Attandance List"
+              : "Workers Camp Meeting Registrations"}
           </div>
           {/* 
           <div className="mobile-view row campMeetings-row">
