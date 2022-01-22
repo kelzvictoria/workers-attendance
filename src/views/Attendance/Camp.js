@@ -452,7 +452,7 @@ class CampMeetings extends Component {
     // );
     //console.log("allCampMeeting", allCampMeeting);
     let campMeetingDays = [
-      ...new Set(allRegs.map((a) => a.date_created.split("T")[0])),
+      ...new Set(allCampMeeting.map((a) => a.date_created.split("T")[0])),
     ];
     // console.log("campMeetingDays", campMeetingDays);
 
@@ -1261,6 +1261,7 @@ const List = ({ listProps }) => {
   } = listProps;
   let group = [];
 
+  console.log("campMeetingDays", campMeetingDays);
   let total_no = campMeetingDays.length;
 
   //let isListItemView = false;
