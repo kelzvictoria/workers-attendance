@@ -146,9 +146,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@vickycinky](https://twitter.com/vickycinky) - kelzvictoria@gmail.com
-
-Project Link: [https://github.com/kelzvictoria/workers-attendance-client](https://github.com/kelzvictoria/workers-attendance-client)
+Victoria Kazeem - [@vickycinky](https://twitter.com/vickycinky) - kelzvictoria@gmail.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
