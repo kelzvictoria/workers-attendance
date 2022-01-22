@@ -49,10 +49,10 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <!-- <li><a href="#usage">Usage</a></li> -->
     <li><a href="#roadmap">Roadmap</a></li>
     <!-- <li><a href="#contributing">Contributing</a></li> -->
-    <li><a href="#license">License</a></li>
+    <!-- <li><a href="#license">License</a></li> -->
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -101,11 +101,11 @@ I built this web application for my Church, TREM Ejigbo to digitize the Workers'
 
 <!-- USAGE EXAMPLES -->
 
-## Usage
+<!-- ## Usage
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- ROADMAP -->
+ROADMAP -->
 
 ## Roadmap
 
@@ -136,11 +136,11 @@ Don't forget to give the project a star! Thanks again!
 
 <!-- LICENSE -->
 
-## License
+<!-- ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p> -->
 
 <!-- CONTACT -->
 
