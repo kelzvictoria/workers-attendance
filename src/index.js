@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
-import 'antd/dist/antd.css';
+import "antd/dist/antd.css";
 
 import Admin from "layouts/Admin.js";
 
@@ -25,15 +25,17 @@ import {
   getWorkers,
   getAttendances,
   getMinistryArms,
-  getDirectorates
-} from "./actions/fetchDataActions"
+  getDirectorates,
+  getCampMeetings,
+  getCampMeetingRegs,
+} from "./actions/fetchDataActions";
 
 import Register from "components/auth/Register";
 import Workers from "views/Reporting/Workers";
 import LogIn from "components/auth/LogIn";
 
-import ProtectedRoute from "views/ProtectedRoute"
-import Details  from "views/MinistryArm/Details"
+import ProtectedRoute from "views/ProtectedRoute";
+import Details from "views/MinistryArm/Details";
 
 const hist = createBrowserHistory();
 
@@ -46,13 +48,13 @@ export class App extends React.Component {
     await store.dispatch(loadUser());
     // await store.dispatch(getWorkers());
     await store.dispatch(getAttendances());
-    await store.dispatch(getMinistryArms())
+    await store.dispatch(getCampMeetings());
+    await store.dispatch(getMinistryArms());
     await store.dispatch(getDirectorates());
+    await store.dispatch(getCampMeetingRegs());
   }
 
-  async componentDidMount() {
-
-  }
+  async componentDidMount() {}
   render() {
     return (
       <Router history={hist}>
@@ -68,7 +70,6 @@ export class App extends React.Component {
         </Provider>
       </Router>
     );
-
   }
 }
 

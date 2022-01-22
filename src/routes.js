@@ -5,20 +5,20 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import Directorates from "views/Directorates/Directorates.js";
 // core components/views for RTL layout
 import Attendance from "views/Attendance/Attendance.js";
+import Camp from "views/Attendance/Camp.js";
 import Workers from "views/Workers/Workers.js";
 import MinistryArm from "views/MinistryArm/MinistryArm.js";
 import Users from "views/Users/Users.js";
 
 import Event from "@material-ui/icons/Event";
-import PermContactCalendar from "@material-ui/icons/PermContactCalendar"
+import PermContactCalendar from "@material-ui/icons/PermContactCalendar";
 
 import LogOut from "./components/auth/LogOut";
 
 import { GroupWork } from "@material-ui/icons";
 import AccountBalance from "@material-ui/icons/AccountBalance";
 import Details from "views/MinistryArm/Details";
-import DirectorateDetails from "views/Directorates/Details"
-
+import DirectorateDetails from "views/Directorates/Details";
 
 const dashboardRoutes = [
   {
@@ -40,6 +40,13 @@ const dashboardRoutes = [
     name: "Workers",
     icon: PermContactCalendar,
     component: Workers,
+    layout: "/admin",
+  },
+  {
+    path: "/camp",
+    name: "Camp",
+    icon: PermContactCalendar,
+    component: Camp,
     layout: "/admin",
   },
   {
@@ -79,7 +86,6 @@ const dashboardRoutes = [
     layout: "/admin",
   },
 
-
   {
     path: "/logout",
     name: "Log Out",
@@ -87,7 +93,6 @@ const dashboardRoutes = [
     icon: Person,
     layout: "/admin",
   },
-
 ];
 
 export default dashboardRoutes;
