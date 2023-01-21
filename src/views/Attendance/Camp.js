@@ -348,6 +348,8 @@ class CampMeetings extends Component {
   handleSearch = (search_val) => {
     const { workers } = this.props.worker;
 
+    // console.log("workers", workers);
+
     let workersIDs = workers.map((w) => w._id);
     const options = workers.map((w) => {
       return {
@@ -355,6 +357,8 @@ class CampMeetings extends Component {
         label: w.first_name + " " + w.last_name,
       };
     });
+
+    console.log("workersIDs", workersIDs);
 
     let res;
 
@@ -434,13 +438,21 @@ class CampMeetings extends Component {
     allRegs = this.props.campMeeting.campMeetingRegs;
 
     console.log("allRegs", allRegs);
+
+    this.state.selectedWorker &&
+      console.log("this.state.selectedWorker", this.state.selectedWorker);
+    this.state.selectedWorker &&
+      console.log(
+        "this.state.workersIDs.includes(this.state.selectedWorker._id)",
+        this.state.workersIDs.includes(this.state.selectedWorker._id)
+      );
     // console.log(
     //   "this.props.campMeeting.campMeetings",
     //   this.props.campMeeting.campMeetings
     // );
     //console.log("allCampMeeting", allCampMeeting);
     let campMeetingDays = [
-      ...new Set(allRegs.map((a) => a.date_created.split("T")[0])),
+      ...new Set(allCampMeeting.map((a) => a.date_created.split("T")[0])),
     ];
     // console.log("campMeetingDays", campMeetingDays);
 
@@ -820,10 +832,10 @@ class CampMeetings extends Component {
                         new Date().toLocaleTimeString()}
                     </h3>
 
-                    {this.state.selectedWorker &&
-                    this.state.workersIDs.includes(
-                      this.state.selectedWorker._id
-                    ) ? (
+                    {this.state.selectedWorker ? (
+                      // && this.state.workersIDs.includes(
+                      //    this.state.selectedWorker._id
+                      //  )
                       <div className="worker-info">
                         <h3>
                           {`${this.state.selectedWorker.first_name} ${this.state.selectedWorker.last_name}`}
@@ -1249,6 +1261,7 @@ const List = ({ listProps }) => {
   } = listProps;
   let group = [];
 
+  console.log("campMeetingDays", campMeetingDays);
   let total_no = campMeetingDays.length;
 
   //let isListItemView = false;
