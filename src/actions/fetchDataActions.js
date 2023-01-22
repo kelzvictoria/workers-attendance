@@ -379,7 +379,7 @@ export const resetDeleteCM = () => {
 
 export const deleteCampMeeting = (id) => (dispatch, getState) => {
   axios
-    .delete(`${API_Server}/camp_reg/${id}`, tokenConfig(getState))
+    .delete(`${API_Server}/camp/${id}`, tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: DELETE_CAMP_MEETING,
@@ -591,6 +591,7 @@ export const deleteCampMeetingReg = (id) => (dispatch, getState) => {
   axios
     .delete(`${API_Server}/camp_reg/${id}`, tokenConfig(getState))
     .then((res) => {
+      console.log("delete successful");
       dispatch({
         type: DELETE_CAMP_MEETING_REG,
         payload: id,
@@ -600,17 +601,22 @@ export const deleteCampMeetingReg = (id) => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      dispatch(
-        returnErrors(
-          err.response.data,
-          err.response.status,
-          "DELETE_CM_REG_FAIL"
-        )
-      );
-
-      dispatch({
-        type: DELETE_CM_REG_FAIL,
-      });
+      if (err && err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data,
+            err.response.status,
+            "DELETE_CM_REG_FAIL"
+          )
+        );
+  
+        dispatch({
+          type: DELETE_CM_REG_FAIL,
+        });
+      }  else {
+        console.log({err});
+       
+      }  
     });
 };
 

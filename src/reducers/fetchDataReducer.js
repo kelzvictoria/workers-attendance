@@ -458,11 +458,12 @@ export default function (state = initialState, action) {
       };
 
     case DELETE_CAMP_MEETING_REG:
+      console.log("state.campMeetingReg", state.campMeetingReg);
       return {
         ...state,
-        campMeetingReg: state.campMeetingReg.filter(
+        campMeetingRegs: state.campMeetingRegs.filter(
           (campMeetingReg) =>
-            campMeetingReg.workers_details.id !== action.payload
+            campMeetingReg.worker_details._id !== action.payload
         ),
       };
 

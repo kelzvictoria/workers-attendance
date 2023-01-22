@@ -168,6 +168,10 @@ class ActionButton extends Component {
         this.props.deleteCampMeetingReg(id);
         this.handleBlur();
         break;
+        case "/camp-meeting/":
+          this.props.deleteCampMeeting(id);
+          this.handleBlur();
+          break;
       default:
         console.log("delete was clicked");
         break;

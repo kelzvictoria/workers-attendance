@@ -431,13 +431,10 @@ class CampMeetings extends Component {
   };
 
   render() {
-    //console.log("selectedWorker", this.state.selectedWorker);
     let campMeetings, allCampMeeting, allRegs;
 
     allCampMeeting = this.props.campMeeting.campMeetings;
     allRegs = this.props.campMeeting.campMeetingRegs;
-
-    console.log("allRegs", allRegs);
 
     this.state.selectedWorker &&
       console.log("this.state.selectedWorker", this.state.selectedWorker);
@@ -446,15 +443,14 @@ class CampMeetings extends Component {
         "this.state.workersIDs.includes(this.state.selectedWorker._id)",
         this.state.workersIDs.includes(this.state.selectedWorker._id)
       );
-    // console.log(
-    //   "this.props.campMeeting.campMeetings",
-    //   this.props.campMeeting.campMeetings
-    // );
-    //console.log("allCampMeeting", allCampMeeting);
+
     let campMeetingDays = [
       ...new Set(allCampMeeting.map((a) => a.date_created.split("T")[0])),
     ];
-    // console.log("campMeetingDays", campMeetingDays);
+
+    let campMeetingYears = [
+      ...new Set(allRegs.map((a) => a.date_created.split("T")[0].split("-")[0])),
+    ]
 
     const {
       isEditCMModalOpen,
@@ -469,29 +465,20 @@ class CampMeetings extends Component {
       campMeetings,
       isAuthenticated: this.props.isAuthenticated,
       workers,
+      campMeetingYears
     };
 
     const listProps = {
       allCampMeeting,
       allRegs,
       campMeetingDays,
+      campMeetingYears,
       isAuthenticated: this.props.isAuthenticated,
       deleteCampMeeting: this.props.deleteCampMeeting,
       user: this.props.logged_in_user,
     };
 
     let cw_to_edit = campMeeting ? campMeeting[0] : "";
-    //  console.log("workersIDs", this.state.workersIDs);
-    // const workersMapping = workers.map((w) => {
-    //   return {
-    //     value: w._id,
-    //     label: w.first_name + " " + w.last_name,
-    //   };
-    // });
-
-    // console.log("options", options);
-    //console.log("this.state", this.state);
-    //console.log("this.props.logged_in_user", this.props.logged_in_user);
     console.log("this.state.isAllView", this.state.isAllView);
     console.log("campMeetings", campMeetings);
     return (
@@ -581,73 +568,14 @@ class CampMeetings extends Component {
               ? "All Camp Meeting Attandance List"
               : "Workers Camp Meeting Registrations"}
           </div>
-          {/* 
-          <div className="mobile-view row campMeetings-row">
-            <div className="col-xs-12 col-sm-5 col-md-6 display--flex">
-              <Button
-                className={`btn btn-primary btn-campMeetings font-size--14 ${
-                  this.state.openTab === "all-campMeetings" && "active-btn"
-                }`}
-                onClick={() => {
-                  this.toggleAddCMModal();
-                }}
-                id="all-campMeetings"
-              >
-                Mark CampMeeting
-              </Button>
-            </div>
-
-            <div className="col-xs-12 col-sm-5 col-md-6 display--flex margin-y--1">
-              <Popconfirm
-                onConfirm={() => {
-                  this.printCampMeeting("today");
-                }}
-                title="Proceed to print today's campMeeting？"
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button
-                  className={`btn btn-primary btn-print-workers font-size--14`}
-                  // onClick={() => {
-                  //   this.printCampMeeting("today");
-                  // }
-                  // }
-                  id="print-todays-campMeeting"
-                >
-                  Print Today's CampMeeting
-                </Button>
-              </Popconfirm>
-            </div>
-            <div className="col-xs-12 col-sm-7 col-md-6 display--flex margin-y--1">
-              <Button
-                className={`btn btn-primary btn-print-workers font-size--14`}
-                onClick={() => {
-                  this.printCampMeeting("last-meeting");
-                }}
-                id="print-todays-campMeeting"
-              >
-                Print Last's CampMeeting
-              </Button>
-            </div>
-            <div className="col-xs-12 col-sm-7 col-md-6 display--flex">
-              <Space direction="vertical" size={12}>
-                <RangePicker
-                  className={`date-range-picker btn-print-workers font-size--14`}
-                  style={{
-                    color: "rgba(0, 0, 0, 0.87) !important;",
-                  }}
-                  onChange={this.printCampMeeting}
-                />
-              </Space>
-            </div>
-          </div> */}
 
           <Card>
             <CardBody>
               {" "}
               {!this.state.isAllView ? (
                 campMeetings.length > 0 && (
-                  <AllCampMeetings allCMRegProps={allCMRegProps} />
+                  <RegList listProps={listProps} />
+                 // <AllCampMeetings  allCMRegProps={allCMRegProps} />
                 )
               ) : (
                 <List listProps={listProps} />
@@ -1302,7 +1230,7 @@ const List = ({ listProps }) => {
           )}`,
 
           action: isAuthenticated ? (
-            <ActionButton data={{ id: cw._id, url: "/campMeetings/" }} />
+            <ActionButton data={{ id: cw._id, url: "/camp-meeting/" }} />
           ) : null,
         };
       });
@@ -1482,7 +1410,275 @@ const List = ({ listProps }) => {
 
   return isListItemView ? (
     <div className="cw-list-view">
-      <h1> CampMeeting List for {new Date(date).toDateString()}</h1>
+      <h1> Camp Meeting Attendance for {new Date(date).toDateString()}</h1>
+      <h4 className="links back-to-list" onClick={() => toggleListView()}>
+        Back to list
+      </h4>
+      <MDBDataTableV5
+        hover
+        entriesOptions={[5, 20, 25]}
+        entries={25}
+        pchangesamount={4}
+        data={listDataTable}
+        pagingTop
+        searchTop
+        searchBottom={false}
+      />
+    </div>
+  ) : (
+    <MDBDataTableV5
+      hover
+      entriesOptions={[5, 20, 25]}
+      entries={25}
+      pchangesamount={4}
+      data={datatable}
+      pagingTop
+      searchTop
+      searchBottom={false}
+    />
+  );
+};
+
+const RegList = ({ listProps }) => {
+  const [isListItemView, setIsListItemView] = useState(false);
+  // const [listItem, setListItem] = useState([]);
+  // const [listItemData, setListItemData] = useState([]);
+  const [listDataTable, setListDataTable] = useState({});
+  const [date, setDate] = useState("");
+
+  const {
+    isAuthenticated,
+    campMeetingDays,
+    allCampMeeting,
+    deleteCampMeeting,
+    user,
+    allRegs,
+    campMeetingYears
+  } = listProps;
+  let group = [];
+
+ // console.log("campMeetingDays", campMeetingDays);
+  let total_no = campMeetingYears.length;
+
+  //let isListItemView = false;
+  let listItem, listItemData; //listDataTable;
+
+  if (total_no) {
+    for (let i = 0; i < total_no; i++) {
+      let obj = {
+        date: campMeetingYears[i],
+        campMeetingRegs: allRegs.filter(
+          (a) => a.date_created.split("T")[0].split("-")[0] === campMeetingYears[i]
+        ),
+      };
+
+      group.push(obj);
+    }
+  }
+
+  //let campMeetingsArray = listProps.allCampMeeting;
+
+  const handleViewCMRFromList = (date) => {
+    setDate(date);
+    toggleListView();
+    console.log("group", group);
+    let item = group.filter((g) => g.date === date);
+    listItem = item;
+
+    // setListItem(item);
+    console.log("listItem", listItem);
+    if (listItem.length) {
+      let itemData = listItem[0].campMeetingRegs.map((cw) => {
+        return {
+          name: `${cw.worker_details.first_name} ${cw.worker_details.middle_name} ${cw.worker_details.last_name}`,
+          //time_in: new Date(`${cw.date_created}`).toLocaleTimeString(),
+          ministry_arms: `${cw.worker_details.ministry_arm.map(
+            (m) => m,
+            ",  "
+          )}`,
+
+          action: isAuthenticated ? (
+            <ActionButton data={{ id: cw._id, url: "/camp-reg/" }} />
+          ) : null,
+        };
+      });
+
+      console.log("itemData", itemData);
+      listItemData = itemData;
+      //setListItemData(itemData);
+      let dt = {
+        columns: [
+          {
+            label: "Name",
+            field: "name",
+            width: 150,
+            cwributes: {
+              "aria-controls": "DataTable",
+              "aria-label": "Name",
+            },
+          },
+          // {
+          //   label: "Time In",
+          //   field: "time_in",
+          //   width: 270,
+          // },
+          {
+            label: "Ministry Arm(s)",
+            field: "ministry_arms",
+            width: 200,
+          },
+
+          {
+            label: "Action",
+            field: "action",
+            sort: "disabled",
+            width: 100,
+          },
+        ],
+        rows: listItemData,
+      };
+      // listDataTable = dt;
+      setListDataTable(dt);
+    }
+  };
+
+  const handlePrintCMRFromList = (date) => {
+    window.location.reload();
+    let data = allRegs.filter((a) => {
+      //   console.log("a.date_created.split('T')[0]", a.date_created.split("T")[0]);
+      return a.date_created.split("T")[0] === date;
+    });
+    if (data.length) {
+      generatePDF("campMeeting-range", data, date);
+    }
+    //  console.log("date", date, "data",data);
+  };
+
+  const deleteCMR = async (id) => {
+    await deleteCampMeetingReg(id);
+  };
+
+  const handleDeleteCMRFromList = (date) => {
+    let data = allRegs.filter((a) => {
+      //   console.log("a.date_created.split('T')[0]", a.date_created.split("T")[0]);
+      return a.date_created.split("T")[0] === date;
+    });
+    let ids = data.map((d) => d._id);
+
+    for (let i = 0; i < ids.length; i++) {
+      try {
+        console.log(`deleting ${ids[i]}...`);
+        deleteCMR(ids[i]);
+      } catch (err) {
+        console.log(`failed to delete campMeetingR: ${ids[i]}`);
+      }
+    }
+  };
+
+  const toggleListView = () => {
+    // isListItemView = !isListItemView;
+    setIsListItemView(!isListItemView);
+  };
+
+  let data = group.map((cw) => {
+    return {
+      date: /*new Date(cw.date).toDateString()*/ cw.date.split("-")[0],
+      num_of_workers_present: cw.campMeetingRegs.length,
+      view: (
+        <a
+          className="links"
+          //href=""
+          onClick={() => {
+            handleViewCMRFromList(cw.date);
+          }}
+        >
+          View
+        </a>
+      ),
+      // print: (
+      //   <a
+      //     className="links"
+      //     onClick={() => handlePrintCMRFromList(cw.date)}
+      //     //href=""
+      //   >
+      //     Print
+      //   </a>
+      // ),
+
+      delete: user.role.includes("superadmin") ? (
+        <Popconfirm
+          onConfirm={() => {
+            handleDeleteCMRFromList(cw.date);
+          }}
+          title="Proceed to print delete？"
+          okText="Yes"
+          cancelText="No"
+        >
+          <a
+            className="links"
+            //href="delete"
+            // onClick={() => handleDeleteCMFromList(cw.date)}
+          >
+            Delete
+          </a>
+        </Popconfirm>
+      ) : (
+        ""
+      ),
+      // action: isAuthenticated ? (
+      //   <ActionButton data={{ id: cw._id, url: "/campMeetings/" }} />
+      // ) : null,
+    };
+  });
+
+  const datatable = {
+    columns: [
+      {
+        label: "Year",
+        field: "date",
+        width: 150,
+        cwributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "Date",
+        },
+      },
+      {
+        label: "No. of Workers Registered",
+        field: "num_of_workers_present",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "view",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "print",
+        width: 150,
+      },
+      {
+        label: "",
+        field: "delete",
+        width: 150,
+      },
+      // {
+      //   label: "Action",
+      //   field: "action",
+      //   sort: "disabled",
+      //   width: 100,
+      // },
+    ],
+    rows: data,
+  };
+
+  console.log("isListItemView", isListItemView);
+
+  console.log("listDataTable", listDataTable);
+
+  return isListItemView ? (
+    <div className="cw-list-view">
+      <h1> Camp Meeting Registrations for {new Date(date).toDateString()}</h1>
       <h4 className="links back-to-list" onClick={() => toggleListView()}>
         Back to list
       </h4>
