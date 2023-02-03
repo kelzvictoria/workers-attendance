@@ -381,11 +381,15 @@ class CampMeetings extends Component {
 
   handleRegSearch = (search_val) => {
     let workers = this.props.worker.workers;
-
-    let allRegs = this.props.campMeeting.campMeetingRegs.map(
+    let current_year = new Date().getFullYear();
+    let allRegs = this.props.campMeeting.campMeetingRegs.filter(r => {
+      console.log("r.date_created.split('T')[0].split('-')[0]", r.date_created.split("T")[0].split("-")[0], typeof r.date_created.split("T")[0].split("-")[0]);
+      return r.date_created.split("T")[0].split("-")[0] == current_year
+    }).map(
       (r) => r.worker_details
     );
-    console.log("allRegs", allRegs);
+
+    console.log("current_year", current_year,typeof current_year, "allRegs", allRegs);
 
     workers = allRegs;
 
