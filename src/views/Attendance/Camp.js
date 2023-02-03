@@ -1682,7 +1682,7 @@ const RegList = ({ listProps }) => {
 
   return isListItemView ? (
     <div className="cw-list-view">
-      <h1> Camp Meeting Registrations for {new Date(date).toDateString()}</h1>
+      <h1> Camp Meeting Registrations for { new Date(date).getFullYear()}</h1>
       <h4 className="links back-to-list" onClick={() => toggleListView()}>
         Back to list
       </h4>
